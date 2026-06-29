@@ -26,10 +26,10 @@ $("#loginBtn").click(function () {
 
     // Redirect based on role
     if (res.user.role === "Admin") {
-        window.location.href = "../html/adminDashboard.html";
+        window.location.href = "../html/adminUsers.html";
     }
     else if (res.user.role === "User") {
-        window.location.href = "../html/customerDashboard.html";
+        window.location.href = "../html/home.html";
     }
     else {
         $("#msg").css("color", "red");

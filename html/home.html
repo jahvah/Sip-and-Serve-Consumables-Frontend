@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SipAndServe Home</title>
+
+  <link rel="stylesheet" href="/css/home.css">
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+
+<h2 class="title">SipAndServe Products</h2>
+
+<div class="grid" id="productGrid"></div>
+
+<script src="/js/home.js"></script>
+
+<div id="productModal" class="modal">
+  <div class="modal-content">
+    <span id="closeModal">&times;</span>
+    <h2 id="modalTitle"></h2>
+    <div id="modalImages" class="modal-images"></div>
+  </div>
+</div>
+
+<div id="loginModal" class="modal">
+  <div class="modal-content small-modal">
+    
+    <h3>Please login first</h3>
+    <p>You need to log in to add items to cart.</p>
+
+    <button id="goLoginBtn">Go to Login</button>
+    <button id="closeLoginModal">Cancel</button>
+
+  </div>
+</div>
+</body>
+</html>
