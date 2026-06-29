@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Information</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+
+    <h2>Complete Information</h2>
+
+    <label>Title</label>
+    <select id="title">
+        <option value="">Select</option>
+        <option value="Mr.">Mr.</option>
+        <option value="Mrs.">Mrs.</option>
+        <option value="Ms.">Ms.</option>
+    </select>
+
+    <br><br>
+
+    <label>First Name</label>
+    <input type="text" id="fname">
+
+    <br><br>
+
+    <label>Last Name</label>
+    <input type="text" id="lname">
+
+    <br><br>
+
+    <label>Address</label>
+    <input type="text" id="address">
+
+    <br><br>
+
+    <label>Town</label>
+    <input type="text" id="town">
+
+    <br><br>
+
+    <label>Phone</label>
+    <input type="text" id="phone">
+
+    <br><br>
+
+    <button id="saveBtn">Save Information</button>
+
+    <p id="message"></p>
+
+<script>
+$(document).ready(function () {
+
+    $("#saveBtn").click(function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: "http://localhost:3000/api/customer/profile",
+            method: "PUT",
+            contentType: "application/json",
+
+            data: JSON.stringify({
+                user_id: localStorage.getItem("userId"),
+                title: $("#title").val(),
+                fname: $("#fname").val(),
+                lname: $("#lname").val(),
+                addressline: $("#address").val(),
+                town: $("#town").val(),
+                phone: $("#phone").val()
+            }),
+
+            success: function (res) {
+                $("#message").text(res.message);
+                alert(res.message);
+
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 1000);
+            },
+
+            error: function (err) {
+                $("#message").text(err.responseJSON?.message || "Update failed");
+            }
+        });
+
+    });
+
+});
+</script>
+
+</body>
+</html>
