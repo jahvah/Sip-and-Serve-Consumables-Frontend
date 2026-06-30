@@ -3,9 +3,14 @@
 <head>
     <title>Login</title>
 
+    <link rel="stylesheet" href="/css/header.css">
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
 </head>
 <body>
+    
+    <div id="header"></div>
 
 <h2>Login</h2>
 
@@ -18,7 +23,11 @@
 </button>
 
 <p id="msg"></p>
-
+<script>
+        $("#header").load("/html/header.html", function () {
+            $.getScript("/js/header.js");
+        });
+    </script>
 <script src="../js/login.js"></script>
 
 </body>

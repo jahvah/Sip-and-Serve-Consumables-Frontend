@@ -3,6 +3,7 @@
 <head>
   <title>SipAndServe Home</title>
 
+  <link rel="stylesheet" href="/css/header.css">
   <link rel="stylesheet" href="/css/home.css">
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -10,11 +11,13 @@
 
 <body>
 
+  <div id="header"></div>
+
 <h2 class="title">SipAndServe Products</h2>
 
 <div class="grid" id="productGrid"></div>
 
-<script src="/js/home.js"></script>
+
 
 <div id="productModal" class="modal">
   <div class="modal-content">
@@ -35,5 +38,13 @@
 
   </div>
 </div>
+
+<script src="/js/home.js"></script>
+
+    <script>
+        $("#header").load("/html/header.html", function () {
+            $.getScript("/js/header.js");
+        });
+    </script>
 </body>
 </html>

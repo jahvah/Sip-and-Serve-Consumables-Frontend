@@ -7,52 +7,15 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <!-- DataTables -->
+<link rel="stylesheet" href="/css/header.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
 <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 
-<style>
-body {
-    font-family: Arial;
-    background: #f4f4f4;
-    padding: 20px;
-}
-
-.container {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-button {
-    padding: 5px 10px;
-    margin: 2px;
-    cursor: pointer;
-}
-
-.editBtn { background: #007bff; color: white; border: none; }
-.deleteBtn { background: red; color: white; border: none; }
-
-/* Modal */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-}
-
-.modal-content {
-    background: white;
-    width: 300px;
-    margin: 10% auto;
-    padding: 20px;
-    border-radius: 10px;
-}
-</style>
+<link rel="stylesheet" href="/css/adminUsers.css">
 </head>
 
 <body>
-
+<div id="header"></div>
 <div class="container">
     <h2>Users Management</h2>
 
@@ -99,97 +62,12 @@ button {
     </div>
 </div>
 
-<script>
-let table;
-
-$(document).ready(function () {
-
-    loadUsers();
-
-    function loadUsers() {
-
-        $.ajax({
-            url: "http://localhost:3000/api/users/all",
-            method: "GET",
-            success: function (res) {
-
-                table = $('#usersTable').DataTable({
-                    destroy: true,
-                    data: res.users,
-                    columns: [
-                        { data: "id" },
-                        { data: "name" },
-                        { data: "email" },
-                        { data: "role" },
-                        { data: "status" },
-                        { data: "created_at" },
-                        { data: "updated_at" },
-
-                        {
-                            data: null,
-                            render: function (data) {
-                                return `
-                                    <button class="editBtn" onclick='editUser(${JSON.stringify(data)})'>Edit</button>
-                                    <button class="deleteBtn" onclick='deleteUser(${data.id})'>Delete</button>
-                                `;
-                            }
-                        }
-                    ]
-                });
-
-            }
+    <script src="/js/adminUsers.js"></script>
+    <script>
+        $("#header").load("/html/header.html", function () {
+            $.getScript("/js/header.js");
         });
-    }
-
-    // SAVE EDIT
-    $("#saveEdit").click(function () {
-
-        $.ajax({
-            url: "http://localhost:3000/api/users/update",
-            method: "PUT",
-            contentType: "application/json",
-            data: JSON.stringify({
-                user_id: $("#editId").val(),
-                role: $("#editRole").val(),
-                status: $("#editStatus").val()
-            }),
-            success: function () {
-                alert("Updated!");
-                $("#editModal").hide();
-                location.reload();
-            }
-        });
-
-    });
-
-});
-
-function editUser(user) {
-    $("#editId").val(user.id);
-    $("#editRole").val(user.role);
-    $("#editStatus").val(user.status);
-    $("#editModal").show();
-}
-
-function closeModal() {
-    $("#editModal").hide();
-}
-
-function deleteUser(id) {
-
-    if (!confirm("Delete this user?")) return;
-
-    $.ajax({
-        url: "http://localhost:3000/api/users/delete/" + id,
-        method: "DELETE",
-        success: function () {
-            alert("Deleted!");
-            location.reload();
-        }
-    });
-
-}
-</script>
+    </script>
 
 </body>
 </html>

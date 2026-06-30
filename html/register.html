@@ -1,22 +1,41 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Register</title>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <title>Register</title>
+
+    <link rel="stylesheet" href="/css/header.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
+
 <body>
 
-  <h2>Register</h2>
+    <!-- Header loads here -->
+    <div id="header"></div>
 
-  <input type="text" id="name" placeholder="Name"><br>
-  <input type="email" id="email" placeholder="Email"><br>
-  <input type="password" id="password" placeholder="Password"><br>
+    <h2>Register</h2>
 
-  <button id="registerBtn">Register</button>
+    <input type="text" id="name" placeholder="Name"><br>
 
-  <p id="msg"></p>
+    <input type="email" id="email" placeholder="Email"><br>
 
-  <script src="../js/register.js"></script>
+    <input type="password" id="password" placeholder="Password"><br>
+
+    <button id="registerBtn">Register</button>
+
+    <p id="msg"></p>
+
+    <script>
+        $("#header").load("/html/header.html", function () {
+            $.getScript("/js/header.js");
+        });
+    </script>
+
+    <script src="/js/register.js"></script>
 
 </body>
+
 </html>
