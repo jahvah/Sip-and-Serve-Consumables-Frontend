@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <title>Admin Users</title>
@@ -7,41 +8,56 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <!-- DataTables -->
-<link rel="stylesheet" href="/css/header.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
 <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 
+<link rel="stylesheet" href="/css/header.css">
 <link rel="stylesheet" href="/css/userView.css">
 </head>
 
 <body>
+
 <div id="header"></div>
+
 <div class="container">
+
     <h2>Users Management</h2>
 
     <table id="usersTable" class="display">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
                 <th>Status</th>
-                <th>Created</th>
-                <th>Updated</th>
+
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Town</th>
+
+                <th>Image</th>
                 <th>Action</th>
             </tr>
         </thead>
+
         <tbody></tbody>
     </table>
+
 </div>
 
-<!-- EDIT MODAL -->
+<!-- ================= EDIT MODAL ================= -->
 <div class="modal" id="editModal">
+
     <div class="modal-content">
+
         <h3>Edit User</h3>
 
         <input type="hidden" id="editId">
+
+        <label>Email</label>
+        <input type="text" id="editEmail" readonly>
 
         <label>Role</label>
         <select id="editRole">
@@ -55,19 +71,42 @@
             <option value="Deactivated">Deactivated</option>
         </select>
 
-        <br><br>
+        <hr>
+
+        <label>First Name</label>
+        <input type="text" id="editFname" placeholder="First Name">
+
+        <label>Last Name</label>
+        <input type="text" id="editLname" placeholder="Last Name">
+
+        <label>Phone</label>
+        <input type="text" id="editPhone" placeholder="Phone">
+
+        <label>Address</label>
+        <input type="text" id="editAddress" placeholder="Address">
+
+        <label>Town</label>
+        <input type="text" id="editTown" placeholder="Town">
+        
+        <label>Profile Image</label>
+        <input type="file" id="editImage">
 
         <button id="saveEdit">Save</button>
         <button onclick="closeModal()">Close</button>
+
     </div>
+
 </div>
 
-    <script src="/js/admin/userView.js"></script>
-    <script>
-        $("#header").load("/html/header.html", function () {
-            $.getScript("/js/header.js");
-        });
-    </script>
+<!-- ================= SCRIPTS ================= -->
+
+<script src="/js/admin/userView.js"></script>
+
+<script>
+    $("#header").load("/html/admin/header.html", function () {
+        $.getScript("/js/header.js");
+    });
+</script>
 
 </body>
 </html>
