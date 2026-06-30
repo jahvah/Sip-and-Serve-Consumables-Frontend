@@ -26,7 +26,7 @@ $("#loginBtn").click(function () {
 
     // Redirect based on role
     if (res.user.role === "Admin") {
-        window.location.href = "../html/adminUsers.html";
+        window.location.href = "/html/admin/adminDashboard.html";
     }
     else if (res.user.role === "User") {
         window.location.href = "../html/home.html";
