@@ -5,7 +5,6 @@ $("#registerBtn").click(function () {
         method: "POST",
         contentType: "application/json",
         data: JSON.stringify({
-            name: $("#name").val(),
             email: $("#email").val(),
             password: $("#password").val()
         }),
