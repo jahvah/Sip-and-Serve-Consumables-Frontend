@@ -34,6 +34,8 @@
 </div>
 <div class="container">
 
+    <button id="openCreateModal">New Customer</button>
+
     <h2>Users Management</h2>
 
     <table id="usersTable" class="display">
@@ -57,6 +59,57 @@
 
         <tbody></tbody>
     </table>
+
+</div>
+
+<div class="modal" id="createModal">
+
+    <div class="modal-content">
+
+        <h3>Create Customer</h3>
+
+        <label>Email</label>
+        <input type="email" id="createEmail">
+
+        <label>Password</label>
+        <input type="password" id="createPassword">
+
+        <label>Role</label>
+        <select id="createRole">
+            <option value="User">User</option>
+            <option value="Admin">Admin</option>
+        </select>
+
+        <label>Status</label>
+        <select id="createStatus">
+            <option value="Active">Active</option>
+            <option value="Deactivated">Deactivated</option>
+        </select>
+
+        <hr>
+
+        <label>First Name</label>
+        <input type="text" id="createFname">
+
+        <label>Last Name</label>
+        <input type="text" id="createLname">
+
+        <label>Phone</label>
+        <input type="text" id="createPhone">
+
+        <label>Address</label>
+        <input type="text" id="createAddress">
+
+        <label>Town</label>
+        <input type="text" id="createTown">
+
+        <label>Profile Image</label>
+        <input type="file" id="createImage">
+
+        <button id="saveCreate">Create Customer</button>
+        <button id="closeCreate">Close</button>
+
+    </div>
 
 </div>
 

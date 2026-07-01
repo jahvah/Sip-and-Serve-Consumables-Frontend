@@ -122,6 +122,87 @@ function loadUsers() {
     });
 
 }
+
+
+$("#saveCreate").click(function () {
+
+        if (
+        $("#createEmail").val().trim() === "" ||
+        $("#createPassword").val().trim() === "" ||
+        $("#createFname").val().trim() === "" ||
+        $("#createLname").val().trim() === "" ||
+        $("#createPhone").val().trim() === "" ||
+        $("#createAddress").val().trim() === "" ||
+        $("#createTown").val().trim() === ""
+    ) {
+        alert("All fields are required.");
+        return;
+    }
+
+    
+
+    
+    let formData = new FormData();
+
+    formData.append("email", $("#createEmail").val());
+    formData.append("password", $("#createPassword").val());
+    formData.append("role", $("#createRole").val());
+    formData.append("status", $("#createStatus").val());
+
+    formData.append("fname", $("#createFname").val());
+    formData.append("lname", $("#createLname").val());
+    formData.append("phone", $("#createPhone").val());
+    formData.append("addressline", $("#createAddress").val());
+    formData.append("town", $("#createTown").val());
+
+    let file = $("#createImage")[0].files[0];
+
+    if (file) {
+        formData.append("image", file);
+    }
+
+    $.ajax({
+
+        url: "http://localhost:3000/api/users/create",
+
+        method: "POST",
+
+        data: formData,
+
+        processData: false,
+
+        contentType: false,
+
+        success: function () {
+
+            alert("Customer created successfully.");
+
+            $("#createModal").hide();
+
+            $("#createEmail").val("");
+            $("#createPassword").val("");
+            $("#createFname").val("");
+            $("#createLname").val("");
+            $("#createPhone").val("");
+            $("#createAddress").val("");
+            $("#createTown").val("");
+            $("#createImage").val("");
+            $("#createRole").val("User");
+            $("#createStatus").val("Active");
+
+            loadUsers();
+
+        },
+
+        error: function (xhr) {
+
+            alert(xhr.responseJSON.message);
+
+        }
+
+    });
+
+});
 /* EDIT */
 function editUser(user) {
 
@@ -148,13 +229,33 @@ function editUser(user) {
     $("#editRole").val(user.role);
     $("#editStatus").val(user.status);
 
+    window.originalRole = user.role;
+    window.originalStatus = user.status;
+
     $("#editModal").show();
 }
 
 /* SAVE */
+
 $("#saveEdit").click(function () {
 
-    
+    let file = $("#editImage")[0].files[0];
+
+    const hasChanges =
+        $("#editRole").val() !== window.originalRole ||
+        $("#editStatus").val() !== window.originalStatus ||
+        $("#editFname").val().trim() !== "" ||
+        $("#editLname").val().trim() !== "" ||
+        $("#editPhone").val().trim() !== "" ||
+        $("#editAddress").val().trim() !== "" ||
+        $("#editTown").val().trim() !== "" ||
+        file;
+
+    if (!hasChanges) {
+        alert("No changes were made.");
+        return;
+    }
+
     let formData = new FormData();
 
     formData.append("user_id", $("#editId").val());
@@ -162,29 +263,26 @@ $("#saveEdit").click(function () {
     formData.append("role", $("#editRole").val());
     formData.append("status", $("#editStatus").val());
 
-
     if ($("#editFname").val().trim() !== "") {
-    formData.append("fname", $("#editFname").val());
-}
+        formData.append("fname", $("#editFname").val());
+    }
 
-if ($("#editLname").val().trim() !== "") {
-    formData.append("lname", $("#editLname").val());
-}
+    if ($("#editLname").val().trim() !== "") {
+        formData.append("lname", $("#editLname").val());
+    }
 
-if ($("#editPhone").val().trim() !== "") {
-    formData.append("phone", $("#editPhone").val());
-}
+    if ($("#editPhone").val().trim() !== "") {
+        formData.append("phone", $("#editPhone").val());
+    }
 
-if ($("#editAddress").val().trim() !== "") {
-    formData.append("addressline", $("#editAddress").val());
-}
+    if ($("#editAddress").val().trim() !== "") {
+        formData.append("addressline", $("#editAddress").val());
+    }
 
-if ($("#editTown").val().trim() !== "") {
-    formData.append("town", $("#editTown").val());
-}
+    if ($("#editTown").val().trim() !== "") {
+        formData.append("town", $("#editTown").val());
+    }
 
-    // IMAGE FILE
-    let file = $("#editImage")[0].files[0];
     if (file) {
         formData.append("image", file);
     }
@@ -197,10 +295,21 @@ if ($("#editTown").val().trim() !== "") {
         contentType: false,
 
         success: function () {
-            alert("Updated!");
+            alert("Updated successfully.");
             $("#editModal").hide();
             loadUsers();
+        },
+
+        error: function (xhr) {
+
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                alert(xhr.responseJSON.message);
+            } else {
+                alert("Update failed.");
+            }
+
         }
+
     });
 
 });
@@ -219,6 +328,21 @@ function deleteUser(id) {
     });
 
 }
+
+$("#openCreateModal").click(function () {
+
+    $("#createModal").show();
+
+});
+
+$("#closeCreate").click(function () {
+
+    $("#createModal").hide();
+
+});
+
+
+
 
 function closeModal() {
     $("#editModal").hide();
