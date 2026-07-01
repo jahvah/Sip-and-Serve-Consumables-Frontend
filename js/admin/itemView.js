@@ -56,7 +56,7 @@ function loadItems() {
 
                     {
                         data: "category",
-                        render: c => c?.description || ""
+                        render: c => c?.category || ""
                     },
 
                     {
@@ -107,7 +107,7 @@ function loadCategories() {
             let options = "";
 
             res.categories.forEach(c => {
-                options += `<option value="${c.category_id}">${c.description}</option>`;
+                options += `<option value="${c.category_id}">${c.category}</option>`;
             });
 
             $("#editCategory").html(options);

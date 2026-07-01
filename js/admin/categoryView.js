@@ -48,13 +48,13 @@ function loadCategories() {
                 columns: [
 
                     { data: "category_id" },
-                    { data: "description" },
+                    { data: "category" },
 
                     {
                         data: null,
                         render: function (data) {
                             return `
-                                <button onclick="editCategory(${data.category_id}, '${encodeURIComponent(data.description)}')">Edit</button>
+                                <button onclick="editCategory(${data.category_id}, '${encodeURIComponent(data.category)}')">Edit</button>
                                 <button onclick="deleteCategory(${data.category_id})">Delete</button>
                             `;
                         }
@@ -66,11 +66,58 @@ function loadCategories() {
     });
 }
 
+$("#saveCreate").click(function () {
+
+    let category = $("#createCategory").val().trim();
+
+    // REQUIRED VALIDATION
+    if (category === "") {
+        alert("Category is required.");
+        return;
+    }
+
+    $.ajax({
+
+        url: "http://localhost:3000/api/category/create",
+        method: "POST",
+        contentType: "application/json",
+
+        data: JSON.stringify({
+            category: category
+        }),
+
+        success: function (res) {
+
+            alert(res.message);
+
+            $("#createModal").hide();
+            loadCategories();
+
+        },
+
+        error: function (xhr) {
+            alert(xhr.responseJSON.message);
+        }
+
+    });
+
+});
+
 /* EDIT */
-function editCategory(id, description) {
+let originalCategory = "";
+
+function editCategory(id, category) {
 
     $("#editId").val(id);
-    $("#editDescription").val(decodeURIComponent(description));
+
+    // store original value for comparison
+    originalCategory = decodeURIComponent(category);
+
+    // EMPTY input field
+    $("#editCategory").val("");
+
+    // SHOW existing data as placeholder
+    $("#editCategory").attr("placeholder", originalCategory);
 
     $("#editModal").show();
 }
@@ -78,20 +125,43 @@ function editCategory(id, description) {
 /* SAVE UPDATE */
 $("#saveEdit").click(function () {
 
+    let newCategory = $("#editCategory").val().trim();
+
+    // if user didn't type anything → no change
+    if (newCategory === "") {
+        alert("No changes made.");
+        $("#editModal").hide();
+        return;
+    }
+
+    // compare with original
+    if (newCategory === originalCategory) {
+        alert("No changes made.");
+        $("#editModal").hide();
+        return;
+    }
+
     $.ajax({
+
         url: "http://localhost:3000/api/category/update",
         method: "PUT",
         contentType: "application/json",
+
         data: JSON.stringify({
             category_id: $("#editId").val(),
-            description: $("#editDescription").val()
+            category: newCategory
         }),
 
-        success: function () {
-            alert("Updated!");
+        success: function (res) {
+            alert(res.message);
             $("#editModal").hide();
             loadCategories();
+        },
+
+        error: function (xhr) {
+            alert(xhr.responseJSON.message);
         }
+
     });
 
 });
@@ -112,6 +182,14 @@ function deleteCategory(id) {
     });
 
 }
+$("#openCreateModal").click(function () {
+    $("#createCategory").val("");
+    $("#createModal").show();
+});
+
+$("#closeCreate").click(function () {
+    $("#createModal").hide();
+});
 
 /* CLOSE MODAL */
 function closeModal() {
