@@ -2,7 +2,19 @@ let table;
 
 $(document).ready(function () {
 
+    const savedMode = localStorage.getItem("viewMode") || "pagination";
+
+    $("#viewMode").val(savedMode);
+
     loadUsers();
+
+    $("#viewMode").change(function () {
+
+        localStorage.setItem("viewMode", $(this).val());
+
+        loadUsers();
+
+    });
 
 });
 
@@ -11,14 +23,29 @@ function loadUsers() {
     $.ajax({
         url: "http://localhost:3000/api/users/all",
         method: "GET",
+
         success: function (res) {
 
             if ($.fn.DataTable.isDataTable("#usersTable")) {
                 $("#usersTable").DataTable().destroy();
             }
 
+            let mode = $("#viewMode").val() || "pagination";
+
             table = $("#usersTable").DataTable({
+
+                destroy: true,
+
                 data: res.users || [],
+
+                paging: mode === "pagination",
+
+                scrollY: mode === "scroll" ? "500px" : false,
+
+                scrollCollapse: true,
+
+                scroller: mode === "scroll",
+
                 columns: [
 
                     { data: "id" },
@@ -26,44 +53,75 @@ function loadUsers() {
                     { data: "role" },
                     { data: "status" },
 
-                    { data: "customer", render: c => c?.fname || "" },
-                    { data: "customer", render: c => c?.lname || "" },
-                    { data: "customer", render: c => c?.phone || "" },
-                    { data: "customer", render: c => c?.addressline || "" },
-                    { data: "customer", render: c => c?.town || "" },
+                    {
+                        data: "customer",
+                        render: c => c?.fname || ""
+                    },
 
                     {
-    data: "customer",
-    render: function (c) {
+                        data: "customer",
+                        render: c => c?.lname || ""
+                    },
 
-        if (!c?.image_path) {
-            return "No Image";
-        }
+                    {
+                        data: "customer",
+                        render: c => c?.phone || ""
+                    },
 
-        return `
-            <img 
-                src="http://localhost:3000${c.image_path}" 
-                width="50" 
-                height="50"
-                style="object-fit: cover; border-radius: 50%;"
-            >
-        `;
-    }
-},
+                    {
+                        data: "customer",
+                        render: c => c?.addressline || ""
+                    },
+
+                    {
+                        data: "customer",
+                        render: c => c?.town || ""
+                    },
+
+                    {
+                        data: "customer",
+                        render: function (c) {
+
+                            if (!c?.image_path) {
+                                return "No Image";
+                            }
+
+                            return `
+                                <img
+                                    src="http://localhost:3000${c.image_path}"
+                                    width="50"
+                                    height="50"
+                                    style="object-fit:cover;border-radius:50%;"
+                                >
+                            `;
+                        }
+                    },
 
                     {
                         data: null,
-                        render: data => `
-                            <button onclick='editUser(${JSON.stringify(data)})'>Edit</button>
-                            <button onclick='deleteUser(${data.id})'>Delete</button>
-                        `
-                    }
-                ]
-            });
-        }
-    });
-}
+                        render: function (data) {
 
+                            return `
+                                <button onclick='editUser(${JSON.stringify(data)})'>
+                                    Edit
+                                </button>
+
+                                <button onclick='deleteUser(${data.id})'>
+                                    Delete
+                                </button>
+                            `;
+                        }
+                    }
+
+                ]
+
+            });
+
+        }
+
+    });
+
+}
 /* EDIT */
 function editUser(user) {
 
@@ -104,11 +162,26 @@ $("#saveEdit").click(function () {
     formData.append("role", $("#editRole").val());
     formData.append("status", $("#editStatus").val());
 
-    formData.append("fname", $("#editFname").val() || null);
-    formData.append("lname", $("#editLname").val() || null);
-    formData.append("phone", $("#editPhone").val() || null);
-    formData.append("addressline", $("#editAddress").val() || null);
-    formData.append("town", $("#editTown").val() || null);
+
+    if ($("#editFname").val().trim() !== "") {
+    formData.append("fname", $("#editFname").val());
+}
+
+if ($("#editLname").val().trim() !== "") {
+    formData.append("lname", $("#editLname").val());
+}
+
+if ($("#editPhone").val().trim() !== "") {
+    formData.append("phone", $("#editPhone").val());
+}
+
+if ($("#editAddress").val().trim() !== "") {
+    formData.append("addressline", $("#editAddress").val());
+}
+
+if ($("#editTown").val().trim() !== "") {
+    formData.append("town", $("#editTown").val());
+}
 
     // IMAGE FILE
     let file = $("#editImage")[0].files[0];
