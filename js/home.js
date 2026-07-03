@@ -2,33 +2,32 @@ let allItems = [];
 
 $(document).ready(function () {
 
-  // 1. FETCH PRODUCTS ON LOAD
+  // FETCH PRODUCTS ON LOAD
   $.ajax({
-    url: "http://localhost:3000/api/items",
+    url: "http://localhost:3000/api/items/all",
     method: "GET",
-    success: function (items) {
+    success: function (res) {
 
-      allItems = items;
-      renderProducts(items);
+      allItems = res.items || [];
+      renderProducts(allItems);
     },
     error: function (err) {
       console.log(err);
     }
   });
 
-  // 2. RENDER PRODUCTS
+  // RENDER PRODUCTS
   function renderProducts(items) {
 
-    
     let html = "";
 
     items.forEach(item => {
 
-      let image = "";
+      let image = "https://via.placeholder.com/200";
 
-      if (item.images && item.images.length > 0) {
+      if (item.images?.length > 0) {
         image = item.images[0].image_path;
-      } else {
+      } else if (item.image) {
         image = item.image;
       }
 
@@ -37,17 +36,17 @@ $(document).ready(function () {
           <img src="${image}" />
 
           <h3>${item.item_name}</h3>
-          <p>${item.description.substring(0, 60)}...</p>
+          <p>${(item.description || "").substring(0, 60)}...</p>
           <p class="price">₱${item.sell_price}</p>
           <p class="stock">Stock: ${item.stock?.quantity ?? 0}</p>
           <p class="category">${item.category?.description ?? ""}</p>
 
           <input
-                type="number"
-                class="qtyInput"
-                min="1"
-                value="1"
-            />
+            type="number"
+            class="qtyInput"
+            min="1"
+            value="1"
+          />
 
           <button class="viewBtn" data-id="${item.item_id}">
             View Images
@@ -63,7 +62,7 @@ $(document).ready(function () {
     $("#productGrid").html(html);
   }
 
-  // 3. VIEW IMAGES MODAL
+  // VIEW IMAGES MODAL
   $(document).on("click", ".viewBtn", function () {
 
     let id = $(this).data("id");
@@ -76,7 +75,7 @@ $(document).ready(function () {
 
     let imgHtml = "";
 
-    item.images.forEach(img => {
+    (item.images || []).forEach(img => {
       imgHtml += `<img src="${img.image_path}" />`;
     });
 
@@ -85,7 +84,7 @@ $(document).ready(function () {
     $("#productModal").fadeIn();
   });
 
-  // 4. CLOSE MODAL
+  // CLOSE MODAL
   $("#closeModal").click(function () {
     $("#productModal").fadeOut();
   });
@@ -96,13 +95,14 @@ $(document).ready(function () {
     }
   });
 
-$(document).on("click", ".cartBtn", function () {
+  // ADD TO CART
+  $(document).on("click", ".cartBtn", function () {
 
     let user = localStorage.getItem("user");
 
     if (!user) {
-        $("#loginModal").fadeIn();
-        return;
+      $("#loginModal").fadeIn();
+      return;
     }
 
     let userData = JSON.parse(user);
@@ -114,31 +114,31 @@ $(document).on("click", ".cartBtn", function () {
     let quantity = Number(card.find(".qtyInput").val());
 
     if (!quantity || quantity < 1) {
-        quantity = 1;
+      quantity = 1;
     }
 
     $.ajax({
-        url: "http://localhost:3000/api/cart/add",
-        method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({
-            user_id: userData.id,
-            item_id: itemId,
-            quantity: quantity
-        }),
-        
-        success: function (res) {
+      url: "http://localhost:3000/api/cart/add",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({
+        user_id: userData.id,
+        item_id: itemId,
+        quantity: quantity
+      }),
+
+      success: function (res) {
         alert(res.message);
-            },
-        error: function (xhr) {
-        alert(xhr.responseJSON.message);
-}
+      },
+
+      error: function (xhr) {
+        alert(xhr.responseJSON?.message || "Error adding to cart");
+      }
     });
 
-});
+  });
 
-  // 6. LOGIN MODAL BUTTONS
-
+  // LOGIN MODAL
   $(document).on("click", "#goLoginBtn", function () {
     window.location.href = "/html/login.html";
   });
