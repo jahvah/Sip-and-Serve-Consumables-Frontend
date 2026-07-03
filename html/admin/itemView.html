@@ -2,130 +2,189 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
-<title>Admin Items</title>
+    <meta charset="UTF-8">
+    <title>Admin Items</title>
 
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-<!-- DataTables -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
-<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 
-<!-- Scroller -->
-<link rel="stylesheet" href="https://cdn.datatables.net/scroller/2.4.3/css/scroller.dataTables.min.css">
-<script src="https://cdn.datatables.net/scroller/2.4.3/js/dataTables.scroller.min.js"></script>
+    <!-- Scroller -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/scroller/2.4.3/css/scroller.dataTables.min.css">
+    <script src="https://cdn.datatables.net/scroller/2.4.3/js/dataTables.scroller.min.js"></script>
 
-<!-- Custom CSS -->
-<link rel="stylesheet" href="/css/header.css">
-<link rel="stylesheet" href="/css/itemView.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/itemView.css">
 
-<style>
-/* basic modal styling (you can move to css file) */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-}
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
 
-.modal-content {
-    background: white;
-    padding: 20px;
-    width: 400px;
-    margin: 10% auto;
-    border-radius: 10px;
-}
+        .modal-content {
+            background: white;
+            padding: 20px;
+            width: 400px;
+            border-radius: 10px;
+            margin: 50px auto;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
 
-.modal-content input,
-.modal-content select {
-    width: 100%;
-    margin: 5px 0;
-    padding: 8px;
-}
-</style>
-
+        .modal-content input,
+        .modal-content select {
+            width: 100%;
+            margin: 5px 0;
+            padding: 8px;
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
-<div id="header"></div>
+    <!-- HEADER -->
+    <div id="/admin/html/header"></div>
 
-<!-- VIEW MODE -->
-<div class="view-mode">
-    <label>View Mode:</label>
-    <select id="viewMode">
-        <option value="pagination">Pagination</option>
-        <option value="scroll">Scroll</option>
-    </select>
-</div>
+    <!-- VIEW MODE -->
+    <div class="view-mode">
+        <label>View Mode:</label>
+        <select id="viewMode">
+            <option value="pagination">Pagination</option>
+            <option value="scroll">Scroll</option>
+        </select>
+    </div>
 
-<!-- TABLE -->
-<div class="container">
+    <!-- TABLE -->
+    <div class="container">
 
-    <h2>Item Management</h2>
+        <button id="openCreateModal">Create Item</button>
 
-    <table id="itemTable" class="display">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Cost</th>
-                <th>Sell</th>
-                <th>Category</th>
-                <th>Image</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+        <h2>Item Management</h2>
 
-</div>
-
-<!-- EDIT MODAL -->
-<div class="modal" id="editModal">
-
-    <div class="modal-content">
-
-        <h3>Edit Item</h3>
-
-        <input type="hidden" id="editId">
-
-        <label>Item Name</label>
-        <input type="text" id="editName" placeholder="Leave blank to keep">
-
-        <label>Description</label>
-        <input type="text" id="editDescription" placeholder="Leave blank to keep">
-
-        <label>Cost Price</label>
-        <input type="text" id="editCost" placeholder="Leave blank to keep">
-
-        <label>Sell Price</label>
-        <input type="text" id="editSell" placeholder="Leave blank to keep">
-
-        <label>Category</label>
-        <select id="editCategory"></select>
-
-        <button id="saveEdit">Save</button>
-        <button onclick="closeModal()">Close</button>
+        <table id="itemTable" class="display">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Cost</th>
+                    <th>Sell</th>
+                    <th>Category</th>
+                    <th>Main Image</th>
+                    <th>Gallery</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
 
     </div>
 
-</div>
+    <!-- EDIT MODAL -->
+    <div class="modal" id="editModal">
 
-<!-- SCRIPT -->
-<script src="/js/admin/itemView.js"></script>
+        <div class="modal-content">
 
-<script>
-$("#header").load("/html/admin/header.html", function () {
-    $.getScript("/js/header.js");
-});
-</script>
+            <h3>Edit Item</h3>
+
+            <input type="hidden" id="editId">
+
+            <label>Item Name</label>
+            <input type="text" id="editName" placeholder="Leave blank to keep">
+
+            <label>Description</label>
+            <input type="text" id="editDescription" placeholder="Leave blank to keep">
+
+            <label>Cost Price</label>
+            <input type="text" id="editCost" placeholder="Leave blank to keep">
+
+            <label>Sell Price</label>
+            <input type="text" id="editSell" placeholder="Leave blank to keep">
+
+            <label>Category</label>
+            <select id="editCategory"></select>
+
+            <label>Main Image</label>
+            <img id="previewMainImage" width="100" style="display:block;margin-bottom:5px;">
+            <input type="file" id="editMainImage" accept="image/*">
+
+            <button id="btnUpdateMainImage">Update Main Image</button>
+            <button id="btnDeleteMainImage">Delete Main Image</button>
+
+            <hr>
+
+            <label>Gallery Images</label>
+            <div id="editGallery"></div>
+
+            <label>Add Images</label>
+            <input type="file" id="editImages" multiple accept="image/*">
+
+            <button id="btnAddImages">Add Images</button>
+
+            <hr>
+
+            <button id="saveEdit">Save Info</button>
+            <button onclick="closeModal()">Close</button>
+
+        </div>
+
+    </div>
+
+    <!-- CREATE MODAL -->
+    <div class="modal" id="createModal">
+
+        <div class="modal-content">
+
+            <h3>Create Item</h3>
+
+            <label>Item Name</label>
+            <input type="text" id="createName">
+
+            <label>Description</label>
+            <input type="text" id="createDescription">
+
+            <label>Cost Price</label>
+            <input type="number" id="createCost">
+
+            <label>Sell Price</label>
+            <input type="number" id="createSell">
+
+            <label>Category</label>
+            <select id="createCategory"></select>
+
+            <label>Main Image</label>
+            <input type="file" id="createMainImage" accept="image/*">
+
+            <label>Images</label>
+            <input type="file" id="createImages" multiple accept="image/*">
+
+            <button id="saveCreate">Create</button>
+            <button id="closeCreate">Close</button>
+
+        </div>
+
+    </div>
+
+    <!-- SCRIPT -->
+    <script src="/js/admin/itemView.js"></script>
+
+    <script>
+        $("#header").load("/html/admin/header.html", function () {
+            $.getScript("/js/header.js");
+        });
+    </script>
 
 </body>
+
 </html>
