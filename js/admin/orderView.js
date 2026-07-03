@@ -5,91 +5,115 @@ let currentOrder = null;
 INIT
 ========================= */
 $(document).ready(function () {
+
     const savedMode = localStorage.getItem("orderViewMode") || "pagination";
     $("#viewMode").val(savedMode);
 
     loadOrders();
+    loadCustomers();
 
     $("#viewMode").change(function () {
         localStorage.setItem("orderViewMode", $(this).val());
         loadOrders();
     });
 
-    $("#openCreateModal").click(function () {
+    $("#openCreateModal").click(() => {
         clearCreateForm();
         $("#createModal").fadeIn();
-        searchCustomers("");
-        searchItems("");
     });
 
-    $("#closeCreate").click(function () {
-        $("#createModal").fadeOut();
-    });
+    $("#closeCreate").click(() => $("#createModal").fadeOut());
 
-    $("#saveCreate").click(function () {
-        createOrder();
-    });
+    $("#saveCreate").click(createOrder);
+    $("#saveEdit").click(updateOrder);
 
-    $("#saveEdit").click(function () {
-        updateOrder();
-    });
-
-    $("#addCreateLine").click(function () {
-        addCreateLine();
-    });
-
-    $("#addEditLine").click(function () {
-        addEditLine();
-    });
+    $("#addCreateLine").click(addCreateLine);
+    $("#addEditLine").click(addEditLine);
 
     $(document).on("click", ".removeLine", function () {
         const row = $(this).closest(".orderline-row");
-        const wrapper = row.parent();
-
-        if (wrapper.find(".orderline-row").length > 1) {
+        if (row.parent().find(".orderline-row").length > 1) {
             row.remove();
         }
-    });
-
-    $(document).on("input focus", "#createCustomerSearch", function () {
-        searchCustomers($(this).val());
-    });
-
-    $(document).on("input focus", ".createItemSearch, .editItemSearch", function () {
-        searchItems($(this).val());
     });
 });
 
 /* =========================
-HELPERS
+CUSTOMERS
 ========================= */
-function getIdFromValue(value) {
-    if (!value) return "";
+function loadCustomers() {
+    $.ajax({
+        url: "http://localhost:3000/api/orders/customers/search?term=",
+        method: "GET",
+        success: function (res) {
 
-    const id = String(value).split(" - ")[0].trim();
+            let options = `<option value="">Select customer</option>`;
 
-    return /^\d+$/.test(id) ? id : "";
+            (res.customers || []).forEach(c => {
+                options += `<option value="${c.customer_id}">${c.fname} ${c.lname}</option>`;
+            });
+
+            $("#createCustomer")
+                .html(options)
+                .select2({
+                    dropdownParent: $("#createModal"),
+                    width: "100%",
+                    placeholder: "Search customer"
+                });
+        }
+    });
 }
 
-function cleanSearchTerm(value) {
-    if (!value) return "";
+/* =========================
+ITEM SELECT (WITH STOCK FIX)
+========================= */
+function initItemSelect(element, selectedId = null) {
 
-    if (String(value).includes(" - ")) {
-        return String(value).split(" - ").slice(1).join(" - ").trim();
-    }
+    $.ajax({
+        url: "http://localhost:3000/api/orders/items/search?term=",
+        method: "GET",
+        success: function (res) {
 
-    return value;
+            let options = `<option value="">Select item</option>`;
+
+            (res.items || []).forEach(i => {
+                const stockQty = i.stock?.quantity || 0;
+
+                options += `
+                    <option value="${i.item_id}" data-stock="${stockQty}">
+                        ${i.item_name} (Stock: ${stockQty})
+                    </option>`;
+            });
+
+            if (element.hasClass("select2-hidden-accessible")) {
+                element.select2('destroy');
+            }
+
+            element.html(options);
+
+            element.select2({
+                dropdownParent: $(".modal:visible"),
+                width: "100%",
+                placeholder: "Search item"
+            });
+
+            if (selectedId) {
+                element.val(selectedId).trigger("change");
+            }
+        }
+    });
 }
 
 /* =========================
 LOAD ORDERS
 ========================= */
 function loadOrders() {
+
     $.ajax({
         url: "http://localhost:3000/api/orders",
         method: "GET",
-
         success: function (res) {
+
             const mode = $("#viewMode").val();
 
             if ($.fn.DataTable.isDataTable("#orderTable")) {
@@ -99,7 +123,6 @@ function loadOrders() {
 
             table = $("#orderTable").DataTable({
                 data: res.data || [],
-                deferRender: true,
 
                 paging: mode === "pagination",
                 scrollY: mode === "scroll" ? "500px" : false,
@@ -111,116 +134,46 @@ function loadOrders() {
 
                     {
                         data: "customer",
-                        render: function (customer) {
-                            if (!customer) return "";
-                            return `${customer.fname || ""} ${customer.lname || ""}`.trim();
-                        }
+                        render: c => c ? `${c.fname} ${c.lname}` : ""
                     },
 
                     { data: "date_placed" },
-
-                    {
-                        data: "date_shipped",
-                        render: function (date) {
-                            return date || "";
-                        }
-                    },
-
-                    {
-                        data: "date_delivered",
-                        render: function (date) {
-                            return date || "";
-                        }
-                    },
-
+                    { data: "date_shipped" },
+                    { data: "date_delivered" },
                     { data: "status" },
 
                     {
                         data: "orderlines",
-                        render: function (lines) {
-                            if (!lines || lines.length === 0) return "";
-
-                            return lines.map(line => {
-                                const itemName = line.item
-                                    ? line.item.item_name
-                                    : `Item ID ${line.item_id}`;
-
-                                return `${itemName} x ${line.quantity || 0}`;
-                            }).join("<br>");
+                        render: lines => {
+                            if (!lines) return "";
+                            return lines.map(l =>
+                                `${l.item?.item_name || "Item"} x ${l.quantity}`
+                            ).join("<br>");
                         }
                     },
 
                     {
                         data: null,
-                        render: function (data) {
-                            if (data.status === "Cancelled") {
-                                return "";
+                        render: data => {
+
+                            if (data.status === "Delivered") {
+                                return `<span style="color:green;font-weight:bold;">Delivered</span>`;
                             }
 
-                            const safeData = encodeURIComponent(JSON.stringify(data));
+                            if (data.status === "Cancelled") {
+                                return `<span style="color:red;font-weight:bold;">Cancelled</span>`;
+                            }
+
+                            const safe = encodeURIComponent(JSON.stringify(data));
 
                             return `
-                                <button onclick="editOrder('${safeData}')">Edit</button>
+                                <button onclick="editOrder('${safe}')">Edit</button>
                                 <button onclick="deleteOrder(${data.orderinfo_id})">Delete</button>
                             `;
                         }
                     }
                 ]
             });
-        },
-
-        error: function (xhr) {
-            console.log(xhr.responseText);
-            alert("Failed to load orders");
-        }
-    });
-}
-
-/* =========================
-SEARCH CUSTOMERS
-========================= */
-function searchCustomers(term) {
-    $.ajax({
-        url: `http://localhost:3000/api/orders/customers/search?term=${encodeURIComponent(cleanSearchTerm(term))}`,
-        method: "GET",
-
-        success: function (res) {
-            let options = "";
-
-            (res.customers || []).forEach(c => {
-                const fullName = `${c.fname || ""} ${c.lname || ""}`.trim();
-                options += `<option value="${c.customer_id} - ${fullName}"></option>`;
-            });
-
-            $("#customerList").html(options);
-        },
-
-        error: function (xhr) {
-            console.log(xhr.responseText);
-        }
-    });
-}
-
-/* =========================
-SEARCH ITEMS
-========================= */
-function searchItems(term) {
-    $.ajax({
-        url: `http://localhost:3000/api/orders/items/search?term=${encodeURIComponent(cleanSearchTerm(term))}`,
-        method: "GET",
-
-        success: function (res) {
-            let options = "";
-
-            (res.items || []).forEach(item => {
-                options += `<option value="${item.item_id} - ${item.item_name}"></option>`;
-            });
-
-            $("#itemList").html(options);
-        },
-
-        error: function (xhr) {
-            console.log(xhr.responseText);
         }
     });
 }
@@ -229,228 +182,236 @@ function searchItems(term) {
 CREATE ORDER
 ========================= */
 function createOrder() {
-    const customerId = getIdFromValue($("#createCustomerSearch").val());
+
+    const customerId = $("#createCustomer").val();
     const datePlaced = $("#createDatePlaced").val();
     const orderlines = collectCreateLines();
 
-    $("#createCustomerId").val(customerId);
+    if (!customerId) return alert("Select customer");
+    if (!datePlaced) return alert("Select date placed");
+    if (orderlines.length === 0) return alert("Add items");
 
-    if (!customerId) {
-        return alert("Please select a customer from the search suggestions.");
-    }
+    validateStockBeforeCreate(orderlines, function () {
 
-    if (!datePlaced) {
-        return alert("Please select date placed.");
-    }
+        $.ajax({
+            url: "http://localhost:3000/api/orders",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                customer_id: customerId,
+                date_placed: datePlaced,
+                status: "Pending",
+                orderlines
+            }),
 
-    if (orderlines.length === 0) {
-        return alert("Please select at least one item from the search suggestions.");
-    }
+            success: function (res) {
+                alert(res.message || "Created");
+                $("#createModal").fadeOut();
+                clearCreateForm();
+                loadOrders();
+            }
+        });
+
+    });
+}
+
+/* =========================
+STOCK VALIDATION (FIXED)
+========================= */
+function validateStockBeforeCreate(orderlines, callback) {
 
     $.ajax({
-        url: "http://localhost:3000/api/orders",
-        method: "POST",
-        contentType: "application/json",
-
-        data: JSON.stringify({
-            customer_id: customerId,
-            date_placed: datePlaced,
-            status: $("#createStatus").val(),
-            orderlines: orderlines
-        }),
-
+        url: "http://localhost:3000/api/orders/items/search?term=",
+        method: "GET",
         success: function (res) {
-            alert(res.message || "Order created");
 
-            $("#createModal").fadeOut();
-            clearCreateForm();
-            loadOrders();
-        },
+            const map = {};
+            (res.items || []).forEach(i => {
+                map[i.item_id] = i;
+            });
 
-        error: function (xhr) {
-            console.log(xhr.responseText);
-            alert(xhr.responseJSON?.message || "Create failed");
+            for (let line of orderlines) {
+
+                const item = map[line.item_id];
+                const stockQty = item?.stock?.quantity || 0;
+
+                if (!item) return alert("Invalid item");
+
+                if (line.quantity > stockQty) {
+                    return alert(`Not enough stock for ${item.item_name}`);
+                }
+            }
+
+            callback();
         }
     });
 }
 
-function clearCreateForm() {
-    $("#createCustomerSearch").val("");
-    $("#createCustomerId").val("");
-    $("#createDatePlaced").val("");
-    $("#createStatus").val("Pending");
+/* =========================
+CREATE LINE
+========================= */
+function addCreateLine() {
 
-    $("#createOrderLines").html(`
+    const row = $(`
         <div class="orderline-row">
-            <input type="text" class="createItemSearch" list="itemList" placeholder="Search item name">
-            <input type="hidden" class="createItemId">
-            <input type="number" class="createQuantity" placeholder="Quantity">
+            <select class="createItem"></select>
+            <input type="number" class="createQuantity" placeholder="Qty">
             <button type="button" class="removeLine">Remove</button>
         </div>
     `);
+
+    $("#createOrderLines").append(row);
+    initItemSelect(row.find(".createItem"));
 }
 
-function addCreateLine(itemId = "", itemName = "", quantity = "") {
-    const value = itemId && itemName ? `${itemId} - ${itemName}` : itemName;
-
-    $("#createOrderLines").append(`
-        <div class="orderline-row">
-            <input type="text" class="createItemSearch" list="itemList" value="${value}" placeholder="Search item name">
-            <input type="hidden" class="createItemId" value="${itemId}">
-            <input type="number" class="createQuantity" value="${quantity}" placeholder="Quantity">
-            <button type="button" class="removeLine">Remove</button>
-        </div>
-    `);
-}
-
+/* =========================
+COLLECT CREATE
+========================= */
 function collectCreateLines() {
-    const orderlines = [];
+
+    const list = [];
 
     $("#createOrderLines .orderline-row").each(function () {
-        const itemValue = $(this).find(".createItemSearch").val();
-        const itemId = getIdFromValue(itemValue);
+
+        const itemId = $(this).find(".createItem").val();
         const qty = $(this).find(".createQuantity").val();
 
-        $(this).find(".createItemId").val(itemId);
-
         if (itemId) {
-            orderlines.push({
+            list.push({
                 item_id: Number(itemId),
                 quantity: Number(qty || 1)
             });
         }
     });
 
-    return orderlines;
+    return list;
 }
 
 /* =========================
 EDIT ORDER
 ========================= */
-function editOrder(encodedData) {
-    currentOrder = JSON.parse(decodeURIComponent(encodedData));
+function editOrder(encoded) {
+
+    currentOrder = JSON.parse(decodeURIComponent(encoded));
 
     $("#editOrderId").val(currentOrder.orderinfo_id);
 
-    const customerName = currentOrder.customer
-        ? `${currentOrder.customer.fname || ""} ${currentOrder.customer.lname || ""}`.trim()
-        : "";
+    $("#editCustomerDisplay").val(
+        currentOrder.customer ? `${currentOrder.customer.fname} ${currentOrder.customer.lname}` : ""
+    );
 
-    $("#editCustomerDisplay").val(customerName);
-    $("#editDatePlacedDisplay").val(currentOrder.date_placed || "");
+    $("#editDatePlacedDisplay").val(currentOrder.date_placed);
 
-    $("#editDateShipped").val("");
-    $("#editDateDelivered").val("");
-    $("#editStatus").val("");
+    $("#editOrderLines").empty();
 
-    $("#editOrderLines").html("");
+    currentOrder.orderlines.forEach(l =>
+        addEditLine(l.item_id, l.quantity)
+    );
 
-    if (currentOrder.orderlines && currentOrder.orderlines.length > 0) {
-        currentOrder.orderlines.forEach(line => {
-            addEditLine(
-                line.item_id,
-                line.item ? line.item.item_name : "",
-                line.quantity || ""
-            );
-        });
+    if (currentOrder.status === "Delivered") {
+        $("#editDateShipped, #editDateDelivered, #editStatus, #addEditLine, #saveEdit")
+            .prop("disabled", true);
     } else {
-        addEditLine();
+        $("#editDateShipped, #editDateDelivered, #editStatus, #addEditLine, #saveEdit")
+            .prop("disabled", false);
     }
 
     $("#editModal").fadeIn();
-    searchItems("");
+}
+
+/* =========================
+EDIT LINE
+========================= */
+function addEditLine(itemId = "", qty = "") {
+
+    const row = $(`
+        <div class="orderline-row">
+            <select class="editItem"></select>
+            <input type="number" class="editQuantity" value="${qty}">
+            <button type="button" class="removeLine">Remove</button>
+        </div>
+    `);
+
+    $("#editOrderLines").append(row);
+    initItemSelect(row.find(".editItem"), itemId);
+}
+
+/* =========================
+COLLECT EDIT
+========================= */
+function collectEditLines() {
+
+    const list = [];
+
+    $("#editOrderLines .orderline-row").each(function () {
+
+        const itemId = $(this).find(".editItem").val();
+        const qty = $(this).find(".editQuantity").val();
+
+        if (itemId) {
+            list.push({
+                item_id: Number(itemId),
+                quantity: Number(qty || 1)
+            });
+        }
+    });
+
+    return list;
 }
 
 /* =========================
 UPDATE ORDER
 ========================= */
 function updateOrder() {
+
+    const shippedDate = $("#editDateShipped").val();
+    const today = new Date().toISOString().split("T")[0];
+
+    if (shippedDate && shippedDate < today) {
+        return alert("You cannot use past date");
+    }
+
     const orderlines = collectEditLines();
+    const newStatus = $("#editStatus").val();
 
     $.ajax({
         url: `http://localhost:3000/api/orders/${$("#editOrderId").val()}`,
         method: "PUT",
         contentType: "application/json",
-
         data: JSON.stringify({
-            date_shipped: $("#editDateShipped").val(),
+            date_shipped: shippedDate,
             date_delivered: $("#editDateDelivered").val(),
-            status: $("#editStatus").val(),
-            orderlines: orderlines
+            status: newStatus,
+            orderlines
         }),
 
         success: function (res) {
-            alert(res.message || "Order updated");
-
+            alert(res.message || "Updated");
             $("#editModal").fadeOut();
             loadOrders();
-        },
-
-        error: function (xhr) {
-            console.log(xhr.responseText);
-            alert(xhr.responseJSON?.message || "Update failed");
         }
     });
-}
-
-function addEditLine(itemId = "", itemName = "", quantity = "") {
-    const value = itemId && itemName ? `${itemId} - ${itemName}` : itemName;
-
-    $("#editOrderLines").append(`
-        <div class="orderline-row">
-            <input type="text" class="editItemSearch" list="itemList" value="${value}" placeholder="Search item name">
-            <input type="hidden" class="editItemId" value="${itemId}">
-            <input type="number" class="editQuantity" value="${quantity}" placeholder="Quantity">
-            <button type="button" class="removeLine">Remove</button>
-        </div>
-    `);
-}
-
-function collectEditLines() {
-    const orderlines = [];
-
-    $("#editOrderLines .orderline-row").each(function () {
-        const itemValue = $(this).find(".editItemSearch").val();
-        const itemId = getIdFromValue(itemValue);
-        const qty = $(this).find(".editQuantity").val();
-
-        $(this).find(".editItemId").val(itemId);
-
-        if (itemId) {
-            orderlines.push({
-                item_id: Number(itemId),
-                quantity: Number(qty || 1)
-            });
-        }
-    });
-
-    return orderlines;
 }
 
 /* =========================
 DELETE ORDER
 ========================= */
 function deleteOrder(id) {
+
     if (!confirm("Delete order?")) return;
 
     $.ajax({
         url: `http://localhost:3000/api/orders/${id}`,
         method: "DELETE",
-
-        success: function () {
-            loadOrders();
-        },
-
-        error: function (xhr) {
-            console.log(xhr.responseText);
-            alert(xhr.responseJSON?.message || "Delete failed");
-        }
+        success: loadOrders
     });
 }
 
 /* =========================
-MODALS
+UTIL
 ========================= */
-function closeEditModal() {
-    $("#editModal").fadeOut();
+function clearCreateForm() {
+    $("#createCustomer").val(null).trigger("change");
+    $("#createDatePlaced").val("");
+    $("#createOrderLines").html("");
 }

@@ -2,24 +2,22 @@
 <html lang="en">
 
 <head>
-
     <div id="header"></div>
-    
+
     <meta charset="UTF-8">
     <title>Admin Orders</title>
 
-    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 
-    <!-- Scroller -->
     <link rel="stylesheet" href="https://cdn.datatables.net/scroller/2.4.3/css/scroller.dataTables.min.css">
     <script src="https://cdn.datatables.net/scroller/2.4.3/js/dataTables.scroller.min.js"></script>
 
-    <!-- Custom CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/itemView.css">
 
@@ -31,196 +29,131 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.5);
             z-index: 999;
         }
 
         .modal-content {
             background: white;
             padding: 20px;
-            width: 500px;
-            border-radius: 10px;
+            width: 520px;
             margin: 50px auto;
+            border-radius: 10px;
             max-height: 90vh;
             overflow-y: auto;
         }
 
-        .modal-content input,
-        .modal-content select {
-            width: 100%;
-            margin: 5px 0;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-
         .orderline-row {
             display: flex;
-            gap: 5px;
-            margin-bottom: 8px;
+            gap: 8px;
+            margin-bottom: 10px;
             align-items: center;
         }
 
-        .orderline-row input[type="text"] {
-            width: 55%;
-        }
-
-        .orderline-row input[type="number"] {
-            width: 25%;
-        }
-
-        .orderline-row button {
-            width: 90px;
-        }
-
-        .view-mode {
-            margin: 20px;
-        }
-
-        input[readonly] {
-            background: #eeeeee;
-            cursor: not-allowed;
-        }
+        .orderline-row select { width: 65%; }
+        .orderline-row input { width: 25%; }
     </style>
 </head>
 
 <body>
 
-    <!-- HEADER -->
-    <div id="header"></div>
+<div id="header"></div>
 
-    <!-- VIEW MODE -->
-    <div class="view-mode">
-        <label>View Mode:</label>
-        <select id="viewMode">
-            <option value="pagination">Pagination</option>
-            <option value="scroll">Scroll</option>
+<div class="container">
+
+    <button id="openCreateModal">Create Order</button>
+
+    <h2>Order Management</h2>
+
+    <table id="orderTable" class="display">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Customer</th>
+            <th>Placed</th>
+            <th>Shipped</th>
+            <th>Delivered</th>
+            <th>Status</th>
+            <th>Items</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+</div>
+
+<!-- CREATE -->
+<div class="modal" id="createModal">
+    <div class="modal-content">
+
+        <h3>Create Order</h3>
+
+        <label>Customer</label>
+        <select id="createCustomer"></select>
+
+        <label>Date Placed</label>
+        <input type="date" id="createDatePlaced">
+
+        <hr>
+
+        <div id="createOrderLines"></div>
+
+        <button id="addCreateLine">Add Item</button>
+
+        <hr>
+
+        <button id="saveCreate">Create</button>
+        <button id="closeCreate">Close</button>
+
+    </div>
+</div>
+
+<!-- EDIT -->
+<div class="modal" id="editModal">
+    <div class="modal-content">
+
+        <h3>Edit Order</h3>
+
+        <input type="hidden" id="editOrderId">
+
+        <label>Customer</label>
+        <input type="text" id="editCustomerDisplay" readonly>
+
+        <label>Date Placed</label>
+        <input type="text" id="editDatePlacedDisplay" readonly>
+
+        <label>Date Shipped</label>
+        <input type="date" id="editDateShipped">
+
+        <label>Date Delivered</label>
+        <input type="date" id="editDateDelivered">
+
+        <label>Status</label>
+        <select id="editStatus">
+            <option value="">Leave blank</option>
+            <option value="Pending">Pending</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
         </select>
-    </div>
 
-    <!-- TABLE -->
-    <div class="container">
+        <hr>
 
-        <button id="openCreateModal">Create Order</button>
+        <div id="editOrderLines"></div>
 
-        <h2>Order Management</h2>
+        <button id="addEditLine">Add Item</button>
 
-        <table id="orderTable" class="display">
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Customer</th>
-                    <th>Date Placed</th>
-                    <th>Date Shipped</th>
-                    <th>Date Delivered</th>
-                    <th>Status</th>
-                    <th>Order Items</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        <hr>
+
+        <button id="saveEdit">Save</button>
+        <button onclick="closeEditModal()">Close</button>
 
     </div>
+</div>
 
-    <!-- EDIT MODAL -->
-    <div class="modal" id="editModal">
-
-        <div class="modal-content">
-
-            <h3>Edit Order</h3>
-
-            <input type="hidden" id="editOrderId">
-
-            <label>Customer</label>
-            <input type="text" id="editCustomerDisplay" readonly>
-
-            <label>Date Placed</label>
-            <input type="text" id="editDatePlacedDisplay" readonly>
-
-            <label>Date Shipped</label>
-            <input type="date" id="editDateShipped" placeholder="Leave blank to keep">
-
-            <label>Date Delivered</label>
-            <input type="date" id="editDateDelivered" placeholder="Leave blank to keep">
-
-            <label>Status</label>
-            <select id="editStatus">
-                <option value="">Leave blank to keep</option>
-                <option value="Pending">Pending</option>
-                <option value="Shipped">Shipped</option>
-                <option value="Delivered">Delivered</option>
-                <option value="Cancelled">Cancelled</option>
-            </select>
-
-            <hr>
-
-            <label>Order Items</label>
-            <div id="editOrderLines"></div>
-
-            <button type="button" id="addEditLine">Add Item</button>
-
-            <hr>
-
-            <button type="button" id="saveEdit">Save Order</button>
-            <button type="button" onclick="closeEditModal()">Close</button>
-
-        </div>
-
-    </div>
-
-    <!-- CREATE MODAL -->
-    <div class="modal" id="createModal">
-
-        <div class="modal-content">
-
-            <h3>Create Order</h3>
-
-            <label>Customer</label>
-            <input type="text" id="createCustomerSearch" list="customerList" placeholder="Search customer name">
-            <input type="hidden" id="createCustomerId">
-            <datalist id="customerList"></datalist>
-
-            <label>Date Placed</label>
-            <input type="date" id="createDatePlaced">
-
-            <label>Status</label>
-            <select id="createStatus">
-                <option value="Pending">Pending</option>
-                <option value="Shipped">Shipped</option>
-                <option value="Delivered">Delivered</option>
-                <option value="Cancelled">Cancelled</option>
-            </select>
-
-            <hr>
-
-            <label>Order Items</label>
-            <div id="createOrderLines">
-                <div class="orderline-row">
-                    <input type="text" class="createItemSearch" list="itemList" placeholder="Search item name">
-                    <input type="hidden" class="createItemId">
-                    <input type="number" class="createQuantity" placeholder="Quantity">
-                    <button type="button" class="removeLine">Remove</button>
-                </div>
-            </div>
-
-            <datalist id="itemList"></datalist>
-
-            <button type="button" id="addCreateLine">Add Item</button>
-
-            <hr>
-
-            <button type="button" id="saveCreate">Create</button>
-            <button type="button" id="closeCreate">Close</button>
-
-        </div>
-
-    </div>
-
-    <!-- SCRIPT -->
-    <script src="/js/admin/orderView.js"></script>
-
-    <script src="/js/header.js"></script>
+<script src="/js/admin/orderView.js"></script>
+<script src="/js/header.js"></script>
 
 </body>
-
 </html>
