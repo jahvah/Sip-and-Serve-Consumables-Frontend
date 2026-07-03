@@ -75,6 +75,13 @@ function loadItems() {
                     { data: "sell_price" },
 
                     {
+                        data: "stock",
+                        render: function (stock) {
+                            return stock ? stock.quantity : 0;
+                        }
+                    },
+
+                    {
                         data: "category",
                         render: function (c) {
                             return c?.category || "";
@@ -146,8 +153,22 @@ function loadCategories() {
                 options += `<option value="${c.category_id}">${c.category}</option>`;
             });
 
-            $("#editCategory").html(options);
-            $("#createCategory").html(options);
+$("#editCategory")
+    .html(options)
+    .select2({
+        dropdownParent: $("#editModal"),
+        width: "100%",
+        placeholder: "Search category"
+    });
+
+$("#createCategory")
+    .html(options)
+    .select2({
+        dropdownParent: $("#createModal"),
+        width: "100%",
+        placeholder: "Search category"
+    });
+    
         },
 
         error: function (xhr) {

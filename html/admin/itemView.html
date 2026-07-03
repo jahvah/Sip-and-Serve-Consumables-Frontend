@@ -2,11 +2,18 @@
 <html lang="en">
 
 <head>
+
+    <div id="header"></div>
+    
     <meta charset="UTF-8">
     <title>Admin Items</title>
 
-    <!-- jQuery -->
+    <!-- jQuery FIRST -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
@@ -80,6 +87,7 @@
                     <th>Description</th>
                     <th>Cost</th>
                     <th>Sell</th>
+                    <th>Stock</th>
                     <th>Category</th>
                     <th>Main Image</th>
                     <th>Gallery</th>
@@ -179,12 +187,7 @@
     <!-- SCRIPT -->
     <script src="/js/admin/itemView.js"></script>
 
-    <script>
-        $("#header").load("/html/admin/header.html", function () {
-            $.getScript("/js/header.js");
-        });
-    </script>
-
+    <script src="/js/header.js"></script>   
 </body>
 
 </html>
