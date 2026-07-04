@@ -4,19 +4,33 @@ $(document).ready(function () {
 
         e.preventDefault();
 
+        let formData = new FormData();
+
+        // USER ID (IMPORTANT)
+        formData.append("user_id", localStorage.getItem("userId"));
+
+        // TEXT FIELDS
+        formData.append("title", $("#title").val());
+        formData.append("fname", $("#fname").val());
+        formData.append("lname", $("#lname").val());
+        formData.append("addressline", $("#address").val());
+        formData.append("town", $("#town").val());
+        formData.append("phone", $("#phone").val());
+
+        // IMAGE FILE
+        let file = $("#profileImage")[0].files[0];
+
+        if (file) {
+            formData.append("profile_image", file);
+        }
+
         $.ajax({
+
             url: "http://localhost:3000/api/customer/profile",
             method: "PUT",
-            contentType: "application/json",
-            data: JSON.stringify({
-                user_id: localStorage.getItem("userId"),
-                title: $("#title").val(),
-                fname: $("#fname").val(),
-                lname: $("#lname").val(),
-                addressline: $("#address").val(),
-                town: $("#town").val(),
-                phone: $("#phone").val()
-            }),
+            data: formData,
+            processData: false,
+            contentType: false,
 
             success: function (res) {
                 alert(res.message);
@@ -26,6 +40,7 @@ $(document).ready(function () {
             error: function (err) {
                 alert(err.responseJSON?.message || "Update failed");
             }
+
         });
 
     });
