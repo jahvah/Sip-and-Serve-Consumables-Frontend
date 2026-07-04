@@ -188,6 +188,7 @@ function createItem() {
     formData.append("description", $("#createDescription").val().trim());
     formData.append("cost_price", $("#createCost").val());
     formData.append("sell_price", $("#createSell").val());
+    formData.append("quantity", $("#createStock").val());
     formData.append("category_id", $("#createCategory").val());
 
     let mainImage = $("#createMainImage")[0].files[0];
@@ -245,7 +246,7 @@ function editItem(encodedData) {
     $("#editDescription").val("").attr("placeholder", currentItem.description);
     $("#editCost").val("").attr("placeholder", currentItem.cost_price);
     $("#editSell").val("").attr("placeholder", currentItem.sell_price);
-
+    $("#editStock").val("").attr("placeholder", currentItem.stock ? currentItem.stock.quantity : 0);
     $("#editCategory").val(currentItem.category_id);
 
     $("#previewMainImage").attr(
@@ -273,6 +274,7 @@ function updateItemInfo() {
             description: $("#editDescription").val().trim(),
             cost_price: $("#editCost").val(),
             sell_price: $("#editSell").val(),
+            quantity: $("#editStock").val(),
             category_id: $("#editCategory").val()
         }),
 
