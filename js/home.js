@@ -1,5 +1,7 @@
 let allItems = [];
 
+const BASE_URL = "http://localhost:3000/";
+
 $(document).ready(function () {
 
   // FETCH PRODUCTS ON LOAD
@@ -26,9 +28,9 @@ $(document).ready(function () {
       let image = "https://via.placeholder.com/200";
 
       if (item.images?.length > 0) {
-        image = item.images[0].image_path;
+        image = BASE_URL + item.images[0].image_path;
       } else if (item.image) {
-        image = item.image;
+        image = BASE_URL + item.image;
       }
 
       html += `
@@ -76,7 +78,7 @@ $(document).ready(function () {
     let imgHtml = "";
 
     (item.images || []).forEach(img => {
-      imgHtml += `<img src="${img.image_path}" />`;
+      imgHtml += `<img src="${BASE_URL + img.image_path}" />`;
     });
 
     $("#modalImages").html(imgHtml);
