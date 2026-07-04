@@ -35,6 +35,8 @@ $(document).ready(function () {
 
                 e.preventDefault();
                 localStorage.removeItem("user");
+                localStorage.removeItem("token");
+                
                 window.location.href = "/html/home.html";
             });
 
@@ -56,6 +58,8 @@ $(document).ready(function () {
 
                 e.preventDefault();
                 localStorage.removeItem("user");
+                localStorage.removeItem("token");
+
                 window.location.href = "/html/home.html";
             });
 
