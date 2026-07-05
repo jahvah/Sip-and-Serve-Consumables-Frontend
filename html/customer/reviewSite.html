@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Review Site</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+    <style>
+        .star {
+            font-size: 24px;
+            cursor: pointer;
+            color: #ccc;
+        }
+
+        .star.selected {
+            color: #f5b301;
+        }
+
+        .review-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .review-img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            margin-right: 5px;
+            border-radius: 5px;
+        }
+
+        .item-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container mt-4">
+
+    <h3 class="mb-4">My Reviews</h3>
+
+    <input type="hidden" id="customer_id">
+
+    <!-- =========================
+         ORDERS TO REVIEW
+    ========================== -->
+    <h5>Orders To Review</h5>
+    <div id="pendingContainer"></div>
+
+    <hr>
+
+    <!-- =========================
+         REVIEW HISTORY
+    ========================== -->
+    <h5>My Reviews</h5>
+    <div id="reviewContainer"></div>
+
+</div>
+
+<!-- =========================
+     CREATE REVIEW MODAL
+========================= -->
+<div class="modal fade" id="createModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5>Create Review</h5>
+            </div>
+
+            <div class="modal-body">
+
+                <input type="hidden" id="c_orderinfo_id">
+                <input type="hidden" id="c_item_id">
+
+                <div id="starContainer">
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                </div>
+
+                <textarea id="c_review_text" class="form-control mt-2" placeholder="Write review..."></textarea>
+
+                <input type="file" id="c_images" multiple class="form-control mt-2">
+
+                <div id="c_preview" class="mt-2"></div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="btnSaveReview">Submit</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- =========================
+     EDIT REVIEW MODAL
+========================= -->
+<div class="modal fade" id="editModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5>Edit Review</h5>
+            </div>
+
+            <div class="modal-body">
+
+                <input type="hidden" id="e_review_id">
+
+                <div id="e_starContainer">
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                </div>
+
+                <textarea id="e_review_text" class="form-control mt-2"></textarea>
+
+                <input type="file" id="e_images" multiple class="form-control mt-2">
+
+                <div id="e_existing_images" class="mt-2"></div>
+                <div id="e_preview" class="mt-2"></div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-success" id="btnUpdateReview">Update</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- =========================
+     VIEW REVIEW MODAL
+========================= -->
+<div class="modal fade" id="viewModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5>Review Details</h5>
+            </div>
+
+            <div class="modal-body">
+
+                <div id="view_content"></div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="/js/customer/reviewSite.js"></script>
+
+</body>
+</html>

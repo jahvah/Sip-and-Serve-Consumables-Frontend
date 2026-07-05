@@ -17,13 +17,6 @@ $(document).ready(function () {
         formData.append("town", $("#town").val());
         formData.append("phone", $("#phone").val());
 
-        // IMAGE FILE
-        let file = $("#profileImage")[0].files[0];
-
-        if (file) {
-            formData.append("profile_image", file);
-        }
-
         $.ajax({
 
             url: "http://localhost:3000/api/customer/profile",

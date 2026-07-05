@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>My Orders</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <link rel="stylesheet" href="/css/header.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f5f5;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1100px;
+            margin: 30px auto;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .noOrders {
+            background: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.1);
+            display: none;
+        }
+
+        .orderCard {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.1);
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .orderHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f0f0f0;
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .orderHeader h3 {
+            margin: 0;
+        }
+
+        .status {
+            padding: 6px 12px;
+            color: white;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .Pending {
+            background: orange;
+        }
+
+        .Shipped {
+            background: royalblue;
+        }
+
+        .Delivered {
+            background: seagreen;
+        }
+
+        .Cancelled {
+            background: crimson;
+        }
+
+        .orderInfo {
+            padding: 20px;
+        }
+
+        .orderInfo p {
+            margin: 6px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table th {
+            background: #333;
+            color: white;
+            padding: 10px;
+        }
+
+        table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .totalRow {
+            text-align: right;
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .actionArea {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .cancelBtn {
+            background: crimson;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .cancelBtn:hover {
+            background: darkred;
+        }
+
+        .cancelBtn:disabled {
+            background: gray;
+            cursor: not-allowed;
+        }
+
+        @media(max-width:800px){
+
+            .orderHeader{
+                flex-direction:column;
+                align-items:flex-start;
+                gap:10px;
+            }
+
+            table{
+                font-size:14px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- Header -->
+    <div id="header"></div>
+
+    <div class="container">
+
+        <h2>My Orders</h2>
+
+        <div id="noOrders" class="noOrders">
+            <h3>No orders found.</h3>
+            <p>You haven't placed any orders yet.</p>
+        </div>
+
+        <!-- Orders will be inserted here -->
+        <div id="ordersContainer"></div>
+
+    </div>
+
+    <script src="/js/header.js"></script>
+    <script src="/js/customer/orderSite.js"></script>
+
+</body>
+
+</html>
