@@ -23,7 +23,7 @@ $(document).ready(function () {
 });
 
 /* =========================
-   GET CUSTOMER ID (IMPORTANT FIX)
+   GET CUSTOMER ID
 ========================= */
 function getCustomer() {
     $.get(`${API}/api/reviews/customer?user_id=${user_id}`, function (res) {
@@ -32,10 +32,9 @@ function getCustomer() {
 }
 
 /* =========================
-   CREATE STAR RATING
+   STAR RATING (CREATE)
 ========================= */
 $(document).on("click", "#starContainer .star", function () {
-
     createRating = $(this).data("value");
 
     $("#starContainer .star").removeClass("selected");
@@ -43,10 +42,9 @@ $(document).on("click", "#starContainer .star", function () {
 });
 
 /* =========================
-   EDIT STAR RATING
+   STAR RATING (EDIT)
 ========================= */
 $(document).on("click", "#e_starContainer .star", function () {
-
     editRating = $(this).data("value");
 
     $("#e_starContainer .star").removeClass("selected");
@@ -64,15 +62,16 @@ function loadPending() {
 
         (res.pending || []).forEach(p => {
 
+            const img = p.image
+                ? `${API}/${p.image}`   // FIXED PATH
+                : '/img/no-image.png';
+
             html += `
             <div class="review-card d-flex justify-content-between align-items-center">
 
                 <div class="d-flex align-items-center">
 
-                    <img 
-                        src="${p.image ? API + '/uploads/items/' + p.image : '/img/no-image.png'}" 
-                        class="item-img mr-3"
-                    >
+                    <img src="${img}" class="item-img mr-3">
 
                     <div>
                         <b>${p.item_name || ""}</b><br>
@@ -160,13 +159,13 @@ function openCreate(orderinfo_id, item_id) {
 }
 
 /* =========================
-   SUBMIT REVIEW (FIXED)
+   CREATE REVIEW
 ========================= */
 $("#btnSaveReview").click(function () {
 
     const formData = new FormData();
 
-    formData.append("customer_id", customer_id); // FIXED
+    formData.append("customer_id", customer_id);
     formData.append("orderinfo_id", $("#c_orderinfo_id").val());
     formData.append("item_id", $("#c_item_id").val());
     formData.append("rating", createRating);
@@ -190,7 +189,7 @@ $("#btnSaveReview").click(function () {
             loadReviews();
         },
         error: function (err) {
-            console.log("Submit error:", err.responseJSON || err);
+            console.log(err.responseJSON || err);
         }
     });
 });
@@ -271,7 +270,7 @@ $("#btnUpdateReview").click(function () {
             loadReviews();
         },
         error: function (err) {
-            console.log("Update error:", err.responseJSON || err);
+            console.log(err.responseJSON || err);
         }
     });
 });
