@@ -1,3 +1,5 @@
+const API = "http://localhost:3000";
+
 $(document).ready(function () {
 
     let user = localStorage.getItem("user");
@@ -46,7 +48,9 @@ $(document).ready(function () {
 
                     total += subtotal;
 
-                    let image = item.image;
+                    let image = item.image
+                    ? `${API}/${item.image}`
+                    : "/img/no-image.png";
 
                     html += `
                         <div class="cart-item" data-id="${item.item_id}">

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+  
+  <div id="header"></div>
   <title>Cart</title>
   <link rel="stylesheet" href="/css/header.css">
   <link rel="stylesheet" href="/css/cart.css">
@@ -17,13 +19,8 @@
 
 <h3 id="totalPrice">Total: ₱0</h3>
 
-    <script>
-        $("#header").load("/html/header.html", function () {
-            $.getScript("/js/header.js");
-        });
-    </script>
-
 <script src="/js/cart.js"></script>
+<script src="/js/header.js"></script>
 
 </body>
 </html>

@@ -1,20 +1,28 @@
 let table;
 let currentOrder = null;
 
+let mode = "pagination";
+let offset = 0;
+let limit = 10;
+let loading = false;
+let hasMore = true;
+
 /* =========================
 INIT
 ========================= */
 $(document).ready(function () {
 
-    const savedMode = localStorage.getItem("orderViewMode") || "pagination";
-    $("#viewMode").val(savedMode);
+    mode = localStorage.getItem("orderViewMode") || "pagination";
+    $("#viewMode").val(mode);
 
-    loadOrders();
+    initTable();
+    loadOrders(true);
     loadCustomers();
 
     $("#viewMode").change(function () {
-        localStorage.setItem("orderViewMode", $(this).val());
-        loadOrders();
+        mode = $(this).val();
+        localStorage.setItem("orderViewMode", mode);
+        resetOrders();
     });
 
     $("#openCreateModal").click(() => {
@@ -39,18 +47,159 @@ $(document).ready(function () {
 });
 
 /* =========================
+TABLE INIT
+========================= */
+function initTable() {
+
+    if ($.fn.DataTable.isDataTable("#orderTable")) {
+        $("#orderTable").DataTable().destroy();
+        $("#orderTable tbody").empty();
+    }
+
+    table = $("#orderTable").DataTable({
+        data: [],
+        paging: false,
+        searching: false,
+        info: false,
+
+        columns: [
+            { data: "orderinfo_id" },
+
+            {
+                data: "customer",
+                render: c => c ? `${c.fname} ${c.lname}` : ""
+            },
+
+            { data: "date_placed" },
+            { data: "date_shipped" },
+            { data: "date_delivered" },
+            { data: "status" },
+
+            {
+                data: "orderlines",
+                render: lines => {
+                    if (!Array.isArray(lines)) return "";
+                    return lines.map(l =>
+                        `${l.item?.item_name || "Item"} x ${l.quantity}`
+                    ).join("<br>");
+                }
+            },
+
+            {
+                data: null,
+                render: data => {
+
+                    if (!data) return "";
+
+                    if (data.status === "Delivered") {
+                        return `<span style="color:green;font-weight:bold;">Delivered</span>`;
+                    }
+
+                    if (data.status === "Cancelled") {
+                        return `<span style="color:red;font-weight:bold;">Cancelled</span>`;
+                    }
+
+                    const safe = encodeURIComponent(JSON.stringify(data));
+
+                    return `
+                        <button onclick="editOrder('${safe}')">Edit</button>
+                        <button onclick="deleteOrder(${data.orderinfo_id})">Delete</button>
+                    `;
+                }
+            }
+        ]
+    });
+
+    // scroll listener (only active in scroll mode)
+    $("#orderTable_wrapper .dataTables_scrollBody").on("scroll", function () {
+
+        if (mode !== "scroll") return;
+        if (loading || !hasMore) return;
+
+        const scrollTop = $(this).scrollTop();
+        const scrollHeight = this.scrollHeight;
+        const clientHeight = this.clientHeight;
+
+        if (scrollTop + clientHeight >= scrollHeight - 50) {
+            loadOrders(false);
+        }
+    });
+}
+
+/* =========================
+LOAD ORDERS (FIXED)
+========================= */
+function loadOrders(reset = false) {
+
+    if (loading) return;
+    loading = true;
+
+    if (reset) {
+        offset = 0;
+        hasMore = true;
+        table.clear().draw();
+    }
+
+    $.ajax({
+        url: `http://localhost:3000/api/orders?limit=${limit}&offset=${offset}`,
+        method: "GET",
+
+        success: function (res) {
+
+            const data = res.data || res.orders || [];
+
+            if (!Array.isArray(data)) {
+                console.log("Invalid API response:", res);
+                loading = false;
+                return;
+            }
+
+            if (data.length < limit) {
+                hasMore = false;
+            }
+
+            offset += data.length;
+
+            table.rows.add(data).draw(false);
+
+            loading = false;
+        },
+
+        error: function (xhr) {
+            console.log(xhr.responseText);
+            loading = false;
+            alert("Failed to load orders");
+        }
+    });
+}
+
+/* =========================
+RESET
+========================= */
+function resetOrders() {
+    offset = 0;
+    hasMore = true;
+    table.clear().draw();
+    loadOrders(true);
+}
+
+/* =========================
 CUSTOMERS
 ========================= */
 function loadCustomers() {
+
     $.ajax({
         url: "http://localhost:3000/api/orders/customers/search?term=",
         method: "GET",
+
         success: function (res) {
 
             let options = `<option value="">Select customer</option>`;
 
             (res.customers || []).forEach(c => {
-                options += `<option value="${c.customer_id}">${c.fname} ${c.lname}</option>`;
+                options += `<option value="${c.customer_id}">
+                    ${c.fname} ${c.lname}
+                </option>`;
             });
 
             $("#createCustomer")
@@ -65,13 +214,14 @@ function loadCustomers() {
 }
 
 /* =========================
-ITEM SELECT (WITH STOCK FIX)
+ITEM SELECT
 ========================= */
 function initItemSelect(element, selectedId = null) {
 
     $.ajax({
         url: "http://localhost:3000/api/orders/items/search?term=",
         method: "GET",
+
         success: function (res) {
 
             let options = `<option value="">Select item</option>`;
@@ -86,7 +236,7 @@ function initItemSelect(element, selectedId = null) {
             });
 
             if (element.hasClass("select2-hidden-accessible")) {
-                element.select2('destroy');
+                element.select2("destroy");
             }
 
             element.html(options);
@@ -100,80 +250,6 @@ function initItemSelect(element, selectedId = null) {
             if (selectedId) {
                 element.val(selectedId).trigger("change");
             }
-        }
-    });
-}
-
-/* =========================
-LOAD ORDERS
-========================= */
-function loadOrders() {
-
-    $.ajax({
-        url: "http://localhost:3000/api/orders",
-        method: "GET",
-        success: function (res) {
-
-            const mode = $("#viewMode").val();
-
-            if ($.fn.DataTable.isDataTable("#orderTable")) {
-                $("#orderTable").DataTable().destroy();
-                $("#orderTable tbody").empty();
-            }
-
-            table = $("#orderTable").DataTable({
-                data: res.data || [],
-
-                paging: mode === "pagination",
-                scrollY: mode === "scroll" ? "500px" : false,
-                scroller: mode === "scroll",
-                scrollCollapse: true,
-
-                columns: [
-                    { data: "orderinfo_id" },
-
-                    {
-                        data: "customer",
-                        render: c => c ? `${c.fname} ${c.lname}` : ""
-                    },
-
-                    { data: "date_placed" },
-                    { data: "date_shipped" },
-                    { data: "date_delivered" },
-                    { data: "status" },
-
-                    {
-                        data: "orderlines",
-                        render: lines => {
-                            if (!lines) return "";
-                            return lines.map(l =>
-                                `${l.item?.item_name || "Item"} x ${l.quantity}`
-                            ).join("<br>");
-                        }
-                    },
-
-                    {
-                        data: null,
-                        render: data => {
-
-                            if (data.status === "Delivered") {
-                                return `<span style="color:green;font-weight:bold;">Delivered</span>`;
-                            }
-
-                            if (data.status === "Cancelled") {
-                                return `<span style="color:red;font-weight:bold;">Cancelled</span>`;
-                            }
-
-                            const safe = encodeURIComponent(JSON.stringify(data));
-
-                            return `
-                                <button onclick="editOrder('${safe}')">Edit</button>
-                                <button onclick="deleteOrder(${data.orderinfo_id})">Delete</button>
-                            `;
-                        }
-                    }
-                ]
-            });
         }
     });
 }
@@ -208,7 +284,7 @@ function createOrder() {
                 alert(res.message || "Created");
                 $("#createModal").fadeOut();
                 clearCreateForm();
-                loadOrders();
+                resetOrders();
             }
         });
 
@@ -216,13 +292,14 @@ function createOrder() {
 }
 
 /* =========================
-STOCK VALIDATION (FIXED)
+STOCK VALIDATION
 ========================= */
 function validateStockBeforeCreate(orderlines, callback) {
 
     $.ajax({
         url: "http://localhost:3000/api/orders/items/search?term=",
         method: "GET",
+
         success: function (res) {
 
             const map = {};
@@ -297,7 +374,8 @@ function editOrder(encoded) {
     $("#editOrderId").val(currentOrder.orderinfo_id);
 
     $("#editCustomerDisplay").val(
-        currentOrder.customer ? `${currentOrder.customer.fname} ${currentOrder.customer.lname}` : ""
+        currentOrder.customer ?
+        `${currentOrder.customer.fname} ${currentOrder.customer.lname}` : ""
     );
 
     $("#editDatePlacedDisplay").val(currentOrder.date_placed);
@@ -371,9 +449,6 @@ function updateOrder() {
         return alert("You cannot use past date");
     }
 
-    const orderlines = collectEditLines();
-    const newStatus = $("#editStatus").val();
-
     $.ajax({
         url: `http://localhost:3000/api/orders/${$("#editOrderId").val()}`,
         method: "PUT",
@@ -381,14 +456,14 @@ function updateOrder() {
         data: JSON.stringify({
             date_shipped: shippedDate,
             date_delivered: $("#editDateDelivered").val(),
-            status: newStatus,
-            orderlines
+            status: $("#editStatus").val(),
+            orderlines: collectEditLines()
         }),
 
         success: function (res) {
             alert(res.message || "Updated");
             $("#editModal").fadeOut();
-            loadOrders();
+            resetOrders();
         }
     });
 }
@@ -403,8 +478,12 @@ function deleteOrder(id) {
     $.ajax({
         url: `http://localhost:3000/api/orders/${id}`,
         method: "DELETE",
-        success: loadOrders
+        success: resetOrders
     });
+}
+
+function closeEditModal() {
+    $("#editModal").fadeOut();
 }
 
 /* =========================
