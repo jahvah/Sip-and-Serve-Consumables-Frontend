@@ -8,10 +8,6 @@ $(document).ready(function () {
     $("#closeBtn").click(() => $("#editModal").hide());
     $("#saveBtn").click(updateProfile);
 
-    /* =========================
-       HIDE/SHOW BACKGROUND TEXT
-    ========================= */
-
     $(".ghost-input").on("input", function () {
 
         const bg = $("#" + $(this).data("bg"));
@@ -25,6 +21,7 @@ $(document).ready(function () {
     });
 
 });
+
 
 /* =========================
    LOAD PROFILE
@@ -44,34 +41,39 @@ function loadProfile() {
         url: `http://localhost:3000/api/customer/profile?user_id=${user_id}`,
         method: "GET",
 
-success: function (res) {
+        success: function (res) {
 
-    currentUser = res;
+            currentUser = res;
 
-    $("#profilePic").attr(
-        "src",
-        "http://localhost:3000/" + res.profile_image
-    );
+            $("#profilePic").attr(
+                "src",
+                "http://localhost:3000/" + res.profile_image
+            );
 
-    $("#email").text(res.email);
-    $("#role").text(res.role);
-    $("#status").text(res.status);
+            $("#email").text(res.email);
+            $("#role").text(res.role);
+            $("#status").text(res.status);
 
-    $("#fullName").text(
-        `${res.title ? res.title + " " : ""}${res.fname} ${res.lname}`
-    );
+            $("#fullName").text(
+                `${res.title ? res.title + " " : ""}${res.fname} ${res.lname}`
+            );
 
-    $("#displayAddress").text(res.addressline);
-    $("#displayTown").text(res.town);
+            $("#displayAddress").text(res.addressline || "");
+            $("#displayTown").text(res.town || "");
+            $("#displayPhone").text(res.phone || "");
 
-},
+        },
+
         error: function () {
+
             alert("Failed to load profile.");
+
         }
 
     });
 
 }
+
 
 /* =========================
    OPEN EDIT MODAL
@@ -80,25 +82,30 @@ function openEditModal() {
 
     if (!currentUser) return;
 
-    // Current title
+    // Current values
     $("#title").val(currentUser.title || "");
 
-    // Clear input fields
+    // Clear file input
+    $("#profileImage").val("");
+
+    // Clear editable inputs
     $("#fname").val("");
     $("#lname").val("");
     $("#addressline").val("");
     $("#town").val("");
-    $("#profileImage").val("");
+    $("#phone").val("");
 
-    // Show current values behind the fields
+    // Show current values behind inputs
     $("#bg-fname").text(currentUser.fname || "").show();
     $("#bg-lname").text(currentUser.lname || "").show();
     $("#bg-addressline").text(currentUser.addressline || "").show();
     $("#bg-town").text(currentUser.town || "").show();
+    $("#bg-phone").text(currentUser.phone || "").show();
 
     $("#editModal").show();
 
 }
+
 
 /* =========================
    UPDATE PROFILE
@@ -113,6 +120,7 @@ function updateProfile() {
     formData.append("lname", $("#lname").val());
     formData.append("addressline", $("#addressline").val());
     formData.append("town", $("#town").val());
+    formData.append("phone", $("#phone").val());
 
     const file = $("#profileImage")[0].files[0];
 

@@ -6,7 +6,7 @@ $(document).ready(function () {
 
         let formData = new FormData();
 
-        // USER ID (IMPORTANT)
+        // USER ID
         formData.append("user_id", localStorage.getItem("userId"));
 
         // TEXT FIELDS
@@ -16,6 +16,17 @@ $(document).ready(function () {
         formData.append("addressline", $("#address").val());
         formData.append("town", $("#town").val());
         formData.append("phone", $("#phone").val());
+
+
+        // =========================
+        // PROFILE IMAGE
+        // =========================
+        let image = $("#profileImage")[0].files[0];
+
+        if (image) {
+            formData.append("profile_image", image);
+        }
+
 
         $.ajax({
 

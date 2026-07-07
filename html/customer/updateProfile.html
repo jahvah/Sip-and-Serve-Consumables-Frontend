@@ -3,14 +3,11 @@
 
 <head>
 
-    <link rel="stylesheet" href="/css/header.css">
-
-    <div id="header"></div>
-
     <meta charset="UTF-8">
     <title>Update Profile</title>
 
-    <!-- jQuery -->
+    <link rel="stylesheet" href="/css/header.css">
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <style>
@@ -102,116 +99,147 @@
 
 <body>
 
-<div class="profile-container">
+    <div id="header"></div>
 
-    <img id="profilePic" src="" alt="Profile">
+    <div class="profile-container">
 
-    <p>
-        <strong>Email:</strong>
-        <span id="email"></span>
-    </p>
+        <img id="profilePic" src="" alt="Profile">
 
-    <p>
-        <strong>Role:</strong>
-        <span id="role"></span>
-    </p>
+        <p>
+            <strong>Email:</strong>
+            <span id="email"></span>
+        </p>
 
-    <p>
-        <strong>Status:</strong>
-        <span id="status"></span>
-    </p>
+        <p>
+            <strong>Role:</strong>
+            <span id="role"></span>
+        </p>
 
-    <p>
-        <strong>Name:</strong>
-        <span id="fullName"></span>
-    </p>
+        <p>
+            <strong>Status:</strong>
+            <span id="status"></span>
+        </p>
 
-    <p>
-        <strong>Address:</strong>
-        <span id="displayAddress"></span>
-    </p>
+        <p>
+            <strong>Name:</strong>
+            <span id="fullName"></span>
+        </p>
 
-    <p>
-        <strong>Town:</strong>
-        <span id="displayTown"></span>
-    </p>
+        <p>
+            <strong>Address:</strong>
+            <span id="displayAddress"></span>
+        </p>
 
-    <button id="editBtn">Update Profile</button>
+        <p>
+            <strong>Town:</strong>
+            <span id="displayTown"></span>
+        </p>
 
-</div>
+        <p>
+            <strong>Phone:</strong>
+            <span id="displayPhone"></span>
+        </p>
 
-<div class="modal" id="editModal">
-
-    <div class="modal-content">
-
-        <h2>Update Profile</h2>
-
-        <label>Profile Image</label>
-        <input type="file" id="profileImage" accept="image/*">
-
-        <br><br>
-
-        <label>Title</label>
-
-        <div class="input-box">
-            <select id="title">
-                <option value="">Select</option>
-                <option value="Mr.">Mr.</option>
-                <option value="Mrs.">Mrs.</option>
-                <option value="Ms.">Ms.</option>
-            </select>
-        </div>
-
-        <label>First Name</label>
-
-        <div class="input-box">
-            <input type="text"
-                   id="fname"
-                   class="ghost-input"
-                   data-bg="bg-fname">
-            <span class="bg-text" id="bg-fname"></span>
-        </div>
-
-        <label>Last Name</label>
-
-        <div class="input-box">
-            <input type="text"
-                   id="lname"
-                   class="ghost-input"
-                   data-bg="bg-lname">
-            <span class="bg-text" id="bg-lname"></span>
-        </div>
-
-        <label>Address</label>
-
-        <div class="input-box">
-            <input type="text"
-                   id="addressline"
-                   class="ghost-input"
-                   data-bg="bg-addressline">
-            <span class="bg-text" id="bg-addressline"></span>
-        </div>
-
-        <label>Town</label>
-
-        <div class="input-box">
-            <input type="text"
-                   id="town"
-                   class="ghost-input"
-                   data-bg="bg-town">
-            <span class="bg-text" id="bg-town"></span>
-        </div>
-
-        <button id="saveBtn">Save</button>
-        <button id="closeBtn">Close</button>
+        <button id="editBtn">
+            Update Profile
+        </button>
 
     </div>
 
-</div>
+    <div class="modal" id="editModal">
 
-<script src="/js/customer/updateProfile.js"></script>
-<script src="/js/header.js"></script>
+        <div class="modal-content">
 
+            <h2>Update Profile</h2>
+
+            <label>Profile Image</label>
+            <input
+                type="file"
+                id="profileImage"
+                accept="image/*">
+
+            <br><br>
+
+            <label>Title</label>
+
+            <div class="input-box">
+                <select id="title">
+                    <option value="">Select</option>
+                    <option value="Mr.">Mr.</option>
+                    <option value="Mrs.">Mrs.</option>
+                    <option value="Ms.">Ms.</option>
+                </select>
+            </div>
+
+            <label>First Name</label>
+
+            <div class="input-box">
+                <input
+                    type="text"
+                    id="fname"
+                    class="ghost-input"
+                    data-bg="bg-fname">
+
+                <span class="bg-text" id="bg-fname"></span>
+            </div>
+
+            <label>Last Name</label>
+
+            <div class="input-box">
+                <input
+                    type="text"
+                    id="lname"
+                    class="ghost-input"
+                    data-bg="bg-lname">
+
+                <span class="bg-text" id="bg-lname"></span>
+            </div>
+
+            <label>Address</label>
+
+            <div class="input-box">
+                <input
+                    type="text"
+                    id="addressline"
+                    class="ghost-input"
+                    data-bg="bg-addressline">
+
+                <span class="bg-text" id="bg-addressline"></span>
+            </div>
+
+            <label>Town</label>
+
+            <div class="input-box">
+                <input
+                    type="text"
+                    id="town"
+                    class="ghost-input"
+                    data-bg="bg-town">
+
+                <span class="bg-text" id="bg-town"></span>
+            </div>
+
+            <label>Phone</label>
+
+            <div class="input-box">
+                <input
+                    type="tel"
+                    id="phone"
+                    class="ghost-input"
+                    data-bg="bg-phone">
+
+                <span class="bg-text" id="bg-phone"></span>
+            </div>
+
+            <button id="saveBtn">Save</button>
+            <button id="closeBtn">Close</button>
+
+        </div>
+
+    </div>
+
+    <script src="/js/customer/updateProfile.js"></script>
+    <script src="/js/header.js"></script>
 
 </body>
 
