@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <div id="header"></div>
+
+    <meta charset="UTF-8">
+    <title>Admin Reviews</title>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/itemView.css">
+
+
+    <style>
+
+        .modal {
+            display:none;
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.5);
+            z-index:999;
+        }
+
+
+        .modal-content {
+
+            background:white;
+            padding:20px;
+            width:600px;
+            margin:50px auto;
+            border-radius:10px;
+            max-height:90vh;
+            overflow-y:auto;
+
+        }
+
+
+        .review-images img {
+
+            width:80px;
+            height:80px;
+            object-fit:cover;
+            margin:5px;
+            border-radius:8px;
+
+        }
+
+
+        .item-image {
+
+            width:60px;
+            height:60px;
+            object-fit:cover;
+            border-radius:8px;
+
+        }
+
+
+        .dataTables_scrollBody {
+            max-height:500px !important;
+        }
+
+
+        .view-mode {
+            margin:10px 0;
+        }
+
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div id="header"></div>
+
+
+<div class="container">
+
+
+    <h2>Review Management</h2>
+
+
+    <!-- VIEW MODE -->
+    <div class="view-mode">
+
+        <label>
+            View Mode:
+        </label>
+
+        <select id="viewMode">
+
+            <option value="pagination">
+                Pagination
+            </option>
+
+            <option value="scroll">
+                Infinite Scroll
+            </option>
+
+        </select>
+
+    </div>
+
+
+
+    <!-- TABLE -->
+    <table id="reviewTable" class="display">
+
+
+        <thead>
+
+            <tr>
+
+                <th>ID</th>
+
+                <th>Customer</th>
+
+                <th>Item</th>
+
+                <th>Item Image</th>
+
+                <th>Rating</th>
+
+                <th>Review</th>
+
+                <th>Review Images</th>
+
+                <th>Date</th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody></tbody>
+
+
+    </table>
+
+
+</div>
+
+
+
+
+
+<!-- VIEW REVIEW MODAL -->
+
+<div class="modal" id="viewModal">
+
+
+    <div class="modal-content">
+
+
+        <h3>
+            Review Details
+        </h3>
+
+
+        <hr>
+
+
+        <label>
+            Customer
+        </label>
+
+        <p id="viewCustomer"></p>
+
+
+
+        <label>
+            Item
+        </label>
+
+        <p id="viewItem"></p>
+
+
+
+        <label>
+            Rating
+        </label>
+
+        <div id="viewRating"></div>
+
+
+
+        <hr>
+
+
+
+        <label>
+            Review
+        </label>
+
+        <p id="viewText"></p>
+
+
+
+        <label>
+            Images
+        </label>
+
+
+        <div id="viewImages" class="review-images"></div>
+
+
+
+        <hr>
+
+
+        <button onclick="closeReviewModal()">
+            Close
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+<script src="/js/admin/adminAuth.js"></script>
+
+<script src="/js/admin/reviewView.js"></script>
+
+<script src="/js/header.js"></script>
+
+
+</body>
+
+</html>
