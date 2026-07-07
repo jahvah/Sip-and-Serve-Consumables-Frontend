@@ -3,38 +3,34 @@ let allItems = [];
 const BASE_URL = "http://localhost:3000/";
 
 $(document).ready(function () {
-
   // FETCH PRODUCTS ON LOAD
   $.ajax({
     url: "http://localhost:3000/api/items/all",
     method: "GET",
     success: function (res) {
-
       allItems = res.items || [];
       renderProducts(allItems);
     },
     error: function (err) {
       console.log(err);
-    }
+    },
   });
 
   // RENDER PRODUCTS
   function renderProducts(items) {
-
     let html = "";
 
-    items.forEach(item => {
-
+    items.forEach((item) => {
       let image = "https://via.placeholder.com/200";
 
-      if (item.images?.length > 0) {
-        image = BASE_URL + item.images[0].image_path;
-      } else if (item.image) {
+      if (item.image) {
         image = BASE_URL + item.image;
+      } else if (item.images?.length > 0) {
+        image = BASE_URL + item.images[0].image_path;
       }
 
       html += `
-        <div class="card">
+        <div class="card" data-id="${item.item_id}">
           <img src="${image}" />
 
           <h3>${item.item_name}</h3>
@@ -64,12 +60,21 @@ $(document).ready(function () {
     $("#productGrid").html(html);
   }
 
+  $(document).on("click", ".card", function (e) {
+    if ($(e.target).closest("button, input, a").length) return;
+
+    const itemId = $(this).data("id");
+    window.location.href =
+      window.location.origin + "/html/product.html?id=" + itemId;
+  });
+
   // VIEW IMAGES MODAL
-  $(document).on("click", ".viewBtn", function () {
+  $(document).on("click", ".viewBtn", function (e) {
+    e.stopPropagation();
 
     let id = $(this).data("id");
 
-    let item = allItems.find(i => i.item_id == id);
+    let item = allItems.find((i) => i.item_id == id);
 
     if (!item) return;
 
@@ -77,7 +82,7 @@ $(document).ready(function () {
 
     let imgHtml = "";
 
-    (item.images || []).forEach(img => {
+    (item.images || []).forEach((img) => {
       imgHtml += `<img src="${BASE_URL + img.image_path}" />`;
     });
 
@@ -99,7 +104,6 @@ $(document).ready(function () {
 
   // ADD TO CART
   $(document).on("click", ".cartBtn", function () {
-
     let user = localStorage.getItem("user");
 
     if (!user) {
@@ -126,7 +130,7 @@ $(document).ready(function () {
       data: JSON.stringify({
         user_id: userData.id,
         item_id: itemId,
-        quantity: quantity
+        quantity: quantity,
       }),
 
       success: function (res) {
@@ -135,9 +139,8 @@ $(document).ready(function () {
 
       error: function (xhr) {
         alert(xhr.responseJSON?.message || "Error adding to cart");
-      }
+      },
     });
-
   });
 
   // LOGIN MODAL
@@ -154,5 +157,4 @@ $(document).ready(function () {
       $("#loginModal").fadeOut();
     }
   });
-
 });
