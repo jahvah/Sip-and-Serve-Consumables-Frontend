@@ -3,120 +3,59 @@
   <head>
     <meta charset="utf-8" />
     <title>Product Details</title>
+
     <link rel="stylesheet" href="/css/header.css" />
     <link rel="stylesheet" href="/css/home.css" />
-    <style>
-      body {
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f4f4f4;
-        margin: 0;
-      }
-      .product-page {
-        max-width: 1100px;
-        margin: 30px auto;
-        padding: 20px;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      }
-      .product-layout {
-        display: grid;
-        grid-template-columns: 1.2fr 0.8fr;
-        gap: 24px;
-      }
-      .main-image {
-        width: 100%;
-        max-height: 420px;
-        min-height: 280px;
-        object-fit: cover;
-        border-radius: 12px;
-        border: 1px solid #ddd;
-      }
-      .thumb-row {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-top: 12px;
-      }
-      .thumb-row img {
-        width: 88px;
-        height: 88px;
-        object-fit: cover;
-        border-radius: 8px;
-        cursor: pointer;
-        border: 2px solid transparent;
-        transition: border-color 0.2s ease;
-      }
-      .thumb-row img.active {
-        border-color: #007bff;
-      }
-      .price {
-        font-size: 24px;
-        font-weight: bold;
-        color: green;
-      }
-      .actions {
-        display: flex;
-        gap: 10px;
-        margin-top: 16px;
-      }
-      .btn {
-        padding: 10px 14px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        color: white;
-        background: #007bff;
-      }
-      .btn.secondary {
-        background: #28a745;
-      }
-      .review {
-        border-top: 1px solid #eee;
-        padding: 10px 0;
-      }
-      .rating {
-        color: #f4b400;
-        font-weight: bold;
-      }
-      @media (max-width: 800px) {
-        .product-layout {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="/css/product.css" />
   </head>
+
   <body>
     <div id="header"></div>
+
     <div class="product-page">
       <div id="product">Loading...</div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/js/header.js"></script>
+
     <script>
       const BASE_URL = "http://localhost:3000";
 
       async function loadProduct(id) {
         const container = document.getElementById("product");
+
         try {
           const res = await fetch(BASE_URL + "/api/items/" + id);
+
           if (!res.ok) throw new Error("Product not found");
+
           const { item } = await res.json();
 
           const stockQty = item.stock?.quantity ?? 0;
+
+          const outOfStock = stockQty <= 0;
+
           const galleryImages = [
             ...(item.image ? [{ image_path: item.image }] : []),
             ...(item.images || []),
           ];
+
           const mainImage = galleryImages[0]
             ? `${BASE_URL}/${galleryImages[0].image_path}`
             : "https://via.placeholder.com/400";
 
           container.innerHTML = `
             <div class="product-layout">
+
               <div>
-                <img class="main-image" id="mainImage" src="${mainImage}" alt="${item.item_name}" />
+                <img
+                  class="main-image"
+                  id="mainImage"
+                  src="${mainImage}"
+                  alt="${item.item_name}"
+                />
+
                 <div class="thumb-row">
                   ${galleryImages
                     .map(
@@ -126,24 +65,90 @@
                           alt="Product image ${index + 1}"
                           class="thumb ${index === 0 ? "active" : ""}"
                         />
-                      `,
+                      `
                     )
                     .join("")}
                 </div>
               </div>
+
               <div>
                 <h1>${item.item_name}</h1>
+
                 <p>${item.description || "No description available."}</p>
+
                 <p class="price">₱${item.sell_price}</p>
-                <p><strong>Stock available:</strong> ${stockQty}</p>
-                <p><strong>Category:</strong> ${item.category?.description || "Uncategorized"}</p>
-                <div class="actions">
-                  <button class="btn" id="addToCartBtn">Add to cart</button>
-                  <button class="btn secondary" id="checkoutBtn">Checkout</button>
-                </div>
-                <h3>Customer Reviews</h3>
-                <div id="reviews"></div>
+
+                <div class="quantity-container">
+
+                  <label><strong>Quantity</strong></label>
+
+                  <div class="quantity-controls">
+
+                      <button
+                          type="button"
+                          id="decreaseQty"
+                          class="qty-btn"
+                          disabled>
+                          −
+                      </button>
+
+                      <input
+                          type="number"
+                          id="quantity"
+                          value="1"
+                          min="1"
+                          max="${stockQty}"
+                          readonly>
+
+                      <button
+                          type="button"
+                          id="increaseQty"
+                          class="qty-btn">
+                          +
+                      </button>
+
+                  </div>
+
+                  <small class="stock-text">
+
+                      ${
+                          stockQty > 0
+                          ? `Stock Available: <strong>${stockQty}</strong>`
+                          : `<span class="out-stock">Out of Stock</span>`
+                      }
+
+                  </small>
+
               </div>
+
+                <p>
+                    <strong>Category:</strong>
+                    ${item.category?.category || "Uncategorized"}
+                </p>
+
+
+                <div class="actions">
+                  <button
+                      class="btn"
+                      id="addToCartBtn"
+                      ${outOfStock ? "disabled" : ""}>
+                      Add to Cart
+                  </button>
+
+                  <button
+                      class="btn secondary"
+                      id="checkoutBtn"
+                      ${outOfStock ? "disabled" : ""}>
+                      Checkout
+                  </button>
+                </div>
+
+                <h3>Customer Reviews</h3>
+
+                <div id="reviews"></div>
+
+              </div>
+
             </div>
           `;
 
@@ -151,29 +156,149 @@
             .getElementById("addToCartBtn")
             .addEventListener("click", async () => {
               const user = localStorage.getItem("user");
+
               if (!user) {
                 alert("Please log in first to add items to cart.");
                 return;
               }
 
               const userData = JSON.parse(user);
+
               const res = await fetch(BASE_URL + "/api/cart/add", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                  "Content-Type": "application/json",
+                },
                 body: JSON.stringify({
                   user_id: userData.id,
                   item_id: item.item_id,
-                  quantity: 1,
+                  quantity: Number(quantityInput.value),
                 }),
               });
+
               const data = await res.json();
-              alert(data.message || "Added to cart");
+
+              if (!res.ok) {
+                  alert(data.message || "Unable to add item.");
+                  return;
+              }
+
+              alert(data.message);
             });
+
+            // =========================
+            // QUANTITY CONTROLS
+            // =========================
+
+            const quantityInput = document.getElementById("quantity");
+
+            const decreaseBtn = document.getElementById("decreaseQty");
+
+            const increaseBtn = document.getElementById("increaseQty");
+
+            function updateQuantityButtons() {
+
+                const qty = Number(quantityInput.value);
+
+                // Disable minus at 1
+                decreaseBtn.disabled = qty <= 1;
+
+                // Disable plus at stock limit
+                increaseBtn.disabled =
+                    qty >= stockQty || stockQty === 0;
+
+            }
+
+            // Initial button state
+            updateQuantityButtons();
+
+            increaseBtn.addEventListener("click", () => {
+
+                let qty = Number(quantityInput.value);
+
+                if (qty < stockQty) {
+
+                    quantityInput.value = qty + 1;
+
+                    updateQuantityButtons();
+
+                }
+
+            });
+
+            decreaseBtn.addEventListener("click", () => {
+
+                let qty = Number(quantityInput.value);
+
+                if (qty > 1) {
+
+                    quantityInput.value = qty - 1;
+
+                    updateQuantityButtons();
+
+                }
+
+            });
+
 
           document
             .getElementById("checkoutBtn")
-            .addEventListener("click", () => {
-              window.location.href = "/html/completeInformation.html";
+            .addEventListener("click", async () => {
+
+                const user = localStorage.getItem("user");
+
+                if (!user) {
+                    alert("Please log in first.");
+                    return;
+                }
+
+                const userData = JSON.parse(user);
+
+                try {
+
+                    const res = await fetch(BASE_URL + "/api/checkout", {
+
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+
+                            user_id: userData.id,
+                            item_id: item.item_id,
+                            quantity: Number(quantityInput.value),
+
+                        })
+
+                    });
+
+                    const data = await res.json();
+
+                    if (!res.ok) {
+
+                        alert(data.message);
+
+                        return;
+
+                    }
+
+                    alert(`Order #${data.order_id} placed successfully!`);
+
+                    window.location.href =
+                        "/html/home.html";
+
+                }
+
+                catch (err) {
+
+                    console.error(err);
+
+                    alert("Checkout failed.");
+
+                }
+
             });
 
           $(document).on("click", ".thumb", function () {
@@ -183,6 +308,7 @@
           });
 
           const reviewsContainer = document.getElementById("reviews");
+
           if (!item.reviews || item.reviews.length === 0) {
             reviewsContainer.innerHTML =
               "<p>No reviews yet for this product.</p>";
@@ -190,12 +316,21 @@
             reviewsContainer.innerHTML = item.reviews
               .map((review) => {
                 const stars = "★".repeat(review.rating || 0);
+
                 return `
                   <div class="review">
                     <strong>${review.customer?.name || "Customer"}</strong>
+
                     <div class="rating">${stars}</div>
+
                     <p>${review.review_text || ""}</p>
-                    ${(review.review_images || []).map((img) => `<img src="${BASE_URL}/${img.image_path}" width="80" style="margin-right:6px; margin-top:6px; border-radius:6px;" />`).join("")}
+
+                    ${(review.review_images || [])
+                      .map(
+                        (img) =>
+                          `<img src="${BASE_URL}/uploads/reviews/${img.image_path}" width="80" style="margin-right:6px; margin-top:6px; border-radius:6px;" />`
+                      )
+                      .join("")}
                   </div>
                 `;
               })
@@ -208,6 +343,7 @@
 
       const params = new URLSearchParams(location.search);
       const id = params.get("id");
+
       if (id) loadProduct(id);
     </script>
   </body>

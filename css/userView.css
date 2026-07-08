@@ -112,3 +112,28 @@ button[onclick^="deleteUser"] {
 img {
     border-radius: 5px;
 }
+
+.card{
+    border-radius:12px;
+}
+
+.card h2{
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.border-left-primary{
+    border-left:5px solid #4e73df;
+}
+
+.border-left-success{
+    border-left:5px solid #1cc88a;
+}
+
+.border-left-warning{
+    border-left:5px solid #f6c23e;
+}
+
+.border-left-danger{
+    border-left:5px solid #e74a3b;
+}

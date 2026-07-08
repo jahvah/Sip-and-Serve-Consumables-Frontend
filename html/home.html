@@ -1,49 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
+    <div id="header"></div>
 
-  <div id="header"></div>
+    <title>SipAndServe Home</title>
 
-  <title>SipAndServe Home</title>
+    <link rel="stylesheet" href="/css/header.css" />
+    <link rel="stylesheet" href="/css/home.css" />
 
-  <link rel="stylesheet" href="/css/header.css">
-  <link rel="stylesheet" href="/css/home.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
+  <body>
+    <div id="header"></div>
 
-<body>
+      <div class="search-container">
 
-  <div id="header"></div>
+          <input
+              type="text"
+              id="searchInput"
+              placeholder="Search products..."
+              autocomplete="off"
+          >
 
-<h2 class="title">SipAndServe Products</h2>
+          <div id="autocompleteList"></div>
 
-<div class="grid" id="productGrid"></div>
+      </div>
 
+    <h2 class="title">SipAndServe Products</h2>
 
+    <div class="grid" id="productGrid"></div>
 
-<div id="productModal" class="modal">
-  <div class="modal-content">
-    <span id="closeModal">&times;</span>
-    <h2 id="modalTitle"></h2>
-    <div id="modalImages" class="modal-images"></div>
-  </div>
-</div>
+    <div id="productModal" class="modal">
+      <div class="modal-content">
+        <span id="closeModal">&times;</span>
+        <h2 id="modalTitle"></h2>
+        <div id="modalImages" class="modal-images"></div>
+      </div>
+    </div>
 
-<div id="loginModal" class="modal">
-  <div class="modal-content small-modal">
-    
-    <h3>Please login first</h3>
-    <p>You need to log in to add items to cart.</p>
+    <div id="loginModal" class="modal">
+      <div class="modal-content small-modal">
+        <h3>Please login first</h3>
+        <p>You need to log in to add items to cart.</p>
 
-    <button id="goLoginBtn">Go to Login</button>
-    <button id="closeLoginModal">Cancel</button>
+        <button id="goLoginBtn">Go to Login</button>
+        <button id="closeLoginModal">Cancel</button>
+      </div>
+    </div>
 
-  </div>
-</div>
-
-<script src="/js/home.js"></script>
-<script src="/js/header.js"></script>
-
-</body>
+    <script src="/js/home.js"></script>
+    <script src="/js/header.js"></script>
+  </body>
 </html>

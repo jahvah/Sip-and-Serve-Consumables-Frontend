@@ -1,70 +1,44 @@
 <header class="header">
+  <div class="logo">
+    <a href="html/home.html">☕ SipAndServe</a>
+  </div>
 
-    <div class="logo">
-        <a href="html/home.html">☕ SipAndServe</a>
+  <nav class="nav-links">
+    <a href="/html/home.html">Home</a>
+    <a href="/html/about.html">About</a>
+  </nav>
+
+  <div class="header-right">
+    <!-- Guest -->
+    <div id="guestMenu">
+      <a href="/html/cart.html">
+        🛒 Cart (<span id="guestCartCount">0</span>)
+      </a>
+
+      <a href="/html/login.html">Login</a>
+
+      <a href="/html/register.html">Register</a>
     </div>
 
-    <nav class="nav-links">
-        <a href="/html/home.html">Home</a>
-        <a href="#">About</a>
-        <a href="#">Menu</a>
-        <a href="#">Contact</a>
-    </nav>
+    <!-- Logged In -->
+    <div id="userMenu" style="display: none">
+      <a href="#">❤️ Wishlist</a>
 
-    <div class="header-right">
+      <a href="/html/cart.html"> 🛒 Cart (<span id="cartCount">0</span>) </a>
 
-        <!-- Guest -->
-        <div id="guestMenu">
+      <div class="dropdown">
+        <button id="accountBtn">👤 <span id="username"></span> ▼</button>
 
-            <input
-                type="text"
-                class="searchBox"
-                placeholder="Search..."
-            >
+        <div class="dropdown-content">
+          <a href="#">My Profile</a>
+          <a href="#">Order History</a>
+          <a href="#">Review History</a>
+          <a href="#">Change Password</a>
+          <a href="#">Settings</a>
 
-            <a href="/html/cart.html">
-                🛒 Cart (<span id="guestCartCount">0</span>)
-            </a>
-
-            <a href="/html/login.html">Login</a>
-
-            <a href="/html/register.html">Register</a>
-
+          <a href="#" id="logoutBtn"> Logout </a>
         </div>
-
-        <!-- Logged In -->
-        <div id="userMenu" style="display:none;">
-
-            <a href="#">❤️ Wishlist</a>
-
-            <a href="/html/cart.html">
-                🛒 Cart (<span id="cartCount">0</span>)
-            </a>
-
-            <div class="dropdown">
-
-                <button id="accountBtn">
-                    👤 <span id="username"></span> ▼
-                </button>
-
-                <div class="dropdown-content">
-
-                    <a href="#">My Profile</a>
-                    <a href="#">Order History</a>
-                    <a href="#">Review History</a>
-                    <a href="#">Change Password</a>
-                    <a href="#">Settings</a>
-
-                    <a href="#" id="logoutBtn">
-                        Logout
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
-
+      </div>
     </div>
-
+  </div>
 </header>

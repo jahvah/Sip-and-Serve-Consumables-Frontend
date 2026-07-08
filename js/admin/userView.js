@@ -1,107 +1,111 @@
 let table;
 
 $(document).ready(function () {
+  const savedMode = localStorage.getItem("viewMode") || "pagination";
 
-    const savedMode = localStorage.getItem("viewMode") || "pagination";
+  $("#viewMode").val(savedMode);
 
-    $("#viewMode").val(savedMode);
+  loadUsers();
+
+  $("#viewMode").change(function () {
+    localStorage.setItem("viewMode", $(this).val());
 
     loadUsers();
-
-    $("#viewMode").change(function () {
-
-        localStorage.setItem("viewMode", $(this).val());
-
-        loadUsers();
-
-    });
-
+  });
 });
 
 function loadUsers() {
+  $.ajax({
+    url: "http://localhost:3000/api/users/all",
+    method: "GET",
 
-    $.ajax({
-        url: "http://localhost:3000/api/users/all",
-        method: "GET",
+    success: function (res) {
+      if ($.fn.DataTable.isDataTable("#usersTable")) {
+        $("#usersTable").DataTable().destroy();
+      }
 
-        success: function (res) {
+      let mode = $("#viewMode").val() || "pagination";
 
-            if ($.fn.DataTable.isDataTable("#usersTable")) {
-                $("#usersTable").DataTable().destroy();
-            }
+      table = $("#usersTable").DataTable({
+        destroy: true,
 
-            let mode = $("#viewMode").val() || "pagination";
+        data: res.users || [],
 
-            table = $("#usersTable").DataTable({
+        paging: mode === "pagination",
 
-                destroy: true,
+        scrollY: mode === "scroll" ? "500px" : false,
 
-                data: res.users || [],
+        scrollCollapse: true,
 
-                paging: mode === "pagination",
+        scroller: mode === "scroll",
 
-                scrollY: mode === "scroll" ? "500px" : false,
+        columns: [
+          { data: "id" },
+          { data: "email" },
+          { data: "role" },
+          { data: "status" },
 
-                scrollCollapse: true,
+          {
+            data: "customer",
+            render: (c) => c?.fname || "",
+          },
 
-                scroller: mode === "scroll",
+          {
+            data: "customer",
+            render: (c) => c?.lname || "",
+          },
 
-                columns: [
+          {
+            data: "customer",
+            render: (c) => c?.phone || "",
+          },
 
-                    { data: "id" },
-                    { data: "email" },
-                    { data: "role" },
-                    { data: "status" },
+          {
+            data: "customer",
+            render: (c) => c?.addressline || "",
+          },
 
-                    {
-                        data: "customer",
-                        render: c => c?.fname || ""
-                    },
+          {
+            data: "customer",
+            render: (c) => c?.town || "",
+          },
 
-                    {
-                        data: "customer",
-                        render: c => c?.lname || ""
-                    },
+          {
+            data: null,
+            render: function (data, type, row) {
+              const customer = row.customer;
+              const imagePath =
+                customer?.image_path ||
+                customer?.profile_image ||
+                customer?.image ||
+                customer?.profileImage ||
+                row.profile_image ||
+                row.image_path ||
+                row.image;
 
-                    {
-                        data: "customer",
-                        render: c => c?.phone || ""
-                    },
+              if (!imagePath) {
+                return "No Image";
+              }
 
-                    {
-                        data: "customer",
-                        render: c => c?.addressline || ""
-                    },
+              const normalizedPath = imagePath.startsWith("http")
+                ? imagePath
+                : `http://localhost:3000${imagePath.startsWith("/") ? "" : "/"}${imagePath}`;
 
-                    {
-                        data: "customer",
-                        render: c => c?.town || ""
-                    },
-
-                    {
-                        data: "customer",
-                        render: function (c) {
-
-                            if (!c?.image_path) {
-                                return "No Image";
-                            }
-
-                            return `
+              return `
                                 <img
-                                    src="http://localhost:3000${c.image_path}"
+                                    src="${normalizedPath}"
                                     width="50"
                                     height="50"
                                     style="object-fit:cover;border-radius:50%;"
                                 >
                             `;
-                        }
-                    },
+            },
+          },
 
-                    {
-                        data: null,
-                        render: function (data) {
-
-                            return `
+          {
+            data: null,
+            render: function (data) {
+              return `
                                 <button onclick='editUser(${JSON.stringify(data)})'>
                                     Edit
                                 </button>
@@ -110,240 +114,208 @@ function loadUsers() {
                                     Delete
                                 </button>
                             `;
-                        }
-                    }
-
-                ]
-
-            });
-
-        }
-
-    });
-
+            },
+          },
+        ],
+      });
+    },
+  });
 }
 
-
 $("#saveCreate").click(function () {
+  if (
+    $("#createEmail").val().trim() === "" ||
+    $("#createPassword").val().trim() === "" ||
+    $("#createFname").val().trim() === "" ||
+    $("#createLname").val().trim() === "" ||
+    $("#createPhone").val().trim() === "" ||
+    $("#createAddress").val().trim() === "" ||
+    $("#createTown").val().trim() === ""
+  ) {
+    alert("All fields are required.");
+    return;
+  }
 
-        if (
-        $("#createEmail").val().trim() === "" ||
-        $("#createPassword").val().trim() === "" ||
-        $("#createFname").val().trim() === "" ||
-        $("#createLname").val().trim() === "" ||
-        $("#createPhone").val().trim() === "" ||
-        $("#createAddress").val().trim() === "" ||
-        $("#createTown").val().trim() === ""
-    ) {
-        alert("All fields are required.");
-        return;
-    }
+  let formData = new FormData();
 
-    
+  formData.append("email", $("#createEmail").val());
+  formData.append("password", $("#createPassword").val());
+  formData.append("role", $("#createRole").val());
+  formData.append("status", $("#createStatus").val());
 
-    
-    let formData = new FormData();
+  formData.append("fname", $("#createFname").val());
+  formData.append("lname", $("#createLname").val());
+  formData.append("phone", $("#createPhone").val());
+  formData.append("addressline", $("#createAddress").val());
+  formData.append("town", $("#createTown").val());
 
-    formData.append("email", $("#createEmail").val());
-    formData.append("password", $("#createPassword").val());
-    formData.append("role", $("#createRole").val());
-    formData.append("status", $("#createStatus").val());
+  let file = $("#createImage")[0].files[0];
 
-    formData.append("fname", $("#createFname").val());
-    formData.append("lname", $("#createLname").val());
-    formData.append("phone", $("#createPhone").val());
-    formData.append("addressline", $("#createAddress").val());
-    formData.append("town", $("#createTown").val());
+  if (file) {
+    formData.append("image", file);
+  }
 
-    let file = $("#createImage")[0].files[0];
+  $.ajax({
+    url: "http://localhost:3000/api/users/create",
 
-    if (file) {
-        formData.append("image", file);
-    }
+    method: "POST",
 
-    $.ajax({
+    data: formData,
 
-        url: "http://localhost:3000/api/users/create",
+    processData: false,
 
-        method: "POST",
+    contentType: false,
 
-        data: formData,
+    success: function () {
+      alert("Customer created successfully.");
 
-        processData: false,
+      $("#createModal").hide();
 
-        contentType: false,
+      $("#createEmail").val("");
+      $("#createPassword").val("");
+      $("#createFname").val("");
+      $("#createLname").val("");
+      $("#createPhone").val("");
+      $("#createAddress").val("");
+      $("#createTown").val("");
+      $("#createImage").val("");
+      $("#createRole").val("User");
+      $("#createStatus").val("Active");
 
-        success: function () {
+      loadUsers();
+    },
 
-            alert("Customer created successfully.");
-
-            $("#createModal").hide();
-
-            $("#createEmail").val("");
-            $("#createPassword").val("");
-            $("#createFname").val("");
-            $("#createLname").val("");
-            $("#createPhone").val("");
-            $("#createAddress").val("");
-            $("#createTown").val("");
-            $("#createImage").val("");
-            $("#createRole").val("User");
-            $("#createStatus").val("Active");
-
-            loadUsers();
-
-        },
-
-        error: function (xhr) {
-
-            alert(xhr.responseJSON.message);
-
-        }
-
-    });
-
+    error: function (xhr) {
+      alert(xhr.responseJSON.message);
+    },
+  });
 });
 /* EDIT */
 function editUser(user) {
+  $("#editId").val(user.id);
 
-    $("#editId").val(user.id);
+  $("#editEmail").val(user.email); // still value (readonly)
 
-    $("#editEmail").val(user.email); // still value (readonly)
+  // PUT EXISTING DATA INTO PLACEHOLDER (NOT VALUE)
+  $("#editFname").val("");
+  $("#editFname").attr("placeholder", user.customer?.fname || "");
 
-    // PUT EXISTING DATA INTO PLACEHOLDER (NOT VALUE)
-    $("#editFname").val("");
-    $("#editFname").attr("placeholder", user.customer?.fname || "");
+  $("#editLname").val("");
+  $("#editLname").attr("placeholder", user.customer?.lname || "");
 
-    $("#editLname").val("");
-    $("#editLname").attr("placeholder", user.customer?.lname || "");
+  $("#editPhone").val("");
+  $("#editPhone").attr("placeholder", user.customer?.phone || "");
 
-    $("#editPhone").val("");
-    $("#editPhone").attr("placeholder", user.customer?.phone || "");
+  $("#editAddress").val("");
+  $("#editAddress").attr("placeholder", user.customer?.addressline || "");
 
-    $("#editAddress").val("");
-    $("#editAddress").attr("placeholder", user.customer?.addressline || "");
+  $("#editTown").val("");
+  $("#editTown").attr("placeholder", user.customer?.town || "");
 
-    $("#editTown").val("");
-    $("#editTown").attr("placeholder", user.customer?.town || "");
+  $("#editRole").val(user.role);
+  $("#editStatus").val(user.status);
 
-    $("#editRole").val(user.role);
-    $("#editStatus").val(user.status);
+  window.originalRole = user.role;
+  window.originalStatus = user.status;
 
-    window.originalRole = user.role;
-    window.originalStatus = user.status;
-
-    $("#editModal").show();
+  $("#editModal").show();
 }
 
 /* SAVE */
 
 $("#saveEdit").click(function () {
+  let file = $("#editImage")[0].files[0];
 
-    let file = $("#editImage")[0].files[0];
+  const hasChanges =
+    $("#editRole").val() !== window.originalRole ||
+    $("#editStatus").val() !== window.originalStatus ||
+    $("#editFname").val().trim() !== "" ||
+    $("#editLname").val().trim() !== "" ||
+    $("#editPhone").val().trim() !== "" ||
+    $("#editAddress").val().trim() !== "" ||
+    $("#editTown").val().trim() !== "" ||
+    file;
 
-    const hasChanges =
-        $("#editRole").val() !== window.originalRole ||
-        $("#editStatus").val() !== window.originalStatus ||
-        $("#editFname").val().trim() !== "" ||
-        $("#editLname").val().trim() !== "" ||
-        $("#editPhone").val().trim() !== "" ||
-        $("#editAddress").val().trim() !== "" ||
-        $("#editTown").val().trim() !== "" ||
-        file;
+  if (!hasChanges) {
+    alert("No changes were made.");
+    return;
+  }
 
-    if (!hasChanges) {
-        alert("No changes were made.");
-        return;
-    }
+  let formData = new FormData();
 
-    let formData = new FormData();
+  formData.append("user_id", $("#editId").val());
+  formData.append("email", $("#editEmail").val());
+  formData.append("role", $("#editRole").val());
+  formData.append("status", $("#editStatus").val());
 
-    formData.append("user_id", $("#editId").val());
-    formData.append("email", $("#editEmail").val());
-    formData.append("role", $("#editRole").val());
-    formData.append("status", $("#editStatus").val());
+  if ($("#editFname").val().trim() !== "") {
+    formData.append("fname", $("#editFname").val());
+  }
 
-    if ($("#editFname").val().trim() !== "") {
-        formData.append("fname", $("#editFname").val());
-    }
+  if ($("#editLname").val().trim() !== "") {
+    formData.append("lname", $("#editLname").val());
+  }
 
-    if ($("#editLname").val().trim() !== "") {
-        formData.append("lname", $("#editLname").val());
-    }
+  if ($("#editPhone").val().trim() !== "") {
+    formData.append("phone", $("#editPhone").val());
+  }
 
-    if ($("#editPhone").val().trim() !== "") {
-        formData.append("phone", $("#editPhone").val());
-    }
+  if ($("#editAddress").val().trim() !== "") {
+    formData.append("addressline", $("#editAddress").val());
+  }
 
-    if ($("#editAddress").val().trim() !== "") {
-        formData.append("addressline", $("#editAddress").val());
-    }
+  if ($("#editTown").val().trim() !== "") {
+    formData.append("town", $("#editTown").val());
+  }
 
-    if ($("#editTown").val().trim() !== "") {
-        formData.append("town", $("#editTown").val());
-    }
+  if (file) {
+    formData.append("image", file);
+  }
 
-    if (file) {
-        formData.append("image", file);
-    }
+  $.ajax({
+    url: "http://localhost:3000/api/users/update-full",
+    method: "PUT",
+    data: formData,
+    processData: false,
+    contentType: false,
 
-    $.ajax({
-        url: "http://localhost:3000/api/users/update-full",
-        method: "PUT",
-        data: formData,
-        processData: false,
-        contentType: false,
+    success: function () {
+      alert("Updated successfully.");
+      $("#editModal").hide();
+      loadUsers();
+    },
 
-        success: function () {
-            alert("Updated successfully.");
-            $("#editModal").hide();
-            loadUsers();
-        },
-
-        error: function (xhr) {
-
-            if (xhr.responseJSON && xhr.responseJSON.message) {
-                alert(xhr.responseJSON.message);
-            } else {
-                alert("Update failed.");
-            }
-
-        }
-
-    });
-
+    error: function (xhr) {
+      if (xhr.responseJSON && xhr.responseJSON.message) {
+        alert(xhr.responseJSON.message);
+      } else {
+        alert("Update failed.");
+      }
+    },
+  });
 });
 
 /* DELETE */
 function deleteUser(id) {
+  if (!confirm("Delete user?")) return;
 
-    if (!confirm("Delete user?")) return;
-
-    $.ajax({
-        url: "http://localhost:3000/api/users/delete/" + id,
-        method: "DELETE",
-        success: function () {
-            loadUsers();
-        }
-    });
-
+  $.ajax({
+    url: "http://localhost:3000/api/users/delete/" + id,
+    method: "DELETE",
+    success: function () {
+      loadUsers();
+    },
+  });
 }
 
 $("#openCreateModal").click(function () {
-
-    $("#createModal").show();
-
+  $("#createModal").show();
 });
 
 $("#closeCreate").click(function () {
-
-    $("#createModal").hide();
-
+  $("#createModal").hide();
 });
 
-
-
-
 function closeModal() {
-    $("#editModal").hide();
+  $("#editModal").hide();
 }
