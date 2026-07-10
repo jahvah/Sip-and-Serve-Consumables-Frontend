@@ -137,3 +137,11 @@ img {
 .border-left-danger{
     border-left:5px solid #e74a3b;
 }
+
+.dataTables_scrollBody{
+    max-height:500px !important;
+}
+
+.view-mode{
+    margin:10px 0;
+}

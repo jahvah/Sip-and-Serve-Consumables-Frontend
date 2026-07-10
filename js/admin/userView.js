@@ -1,125 +1,286 @@
 let table;
 
+let mode = localStorage.getItem("userViewMode") || "pagination";
+
+let offset = 0;
+let limit = 10;
+
+let loading = false;
+let hasMore = true;
+
 $(document).ready(function () {
-  const savedMode = localStorage.getItem("viewMode") || "pagination";
 
-  $("#viewMode").val(savedMode);
+    mode = localStorage.getItem("userViewMode") || "pagination";
 
-  loadUsers();
+    $("#viewMode").val(mode);
 
-  $("#viewMode").change(function () {
-    localStorage.setItem("viewMode", $(this).val());
+    initTable();
 
-    loadUsers();
-  });
+    if(mode==="pagination"){
+
+        loadPagination();
+
+    }else{
+
+        loadInfinite(true);
+
+    }
+
+    $("#viewMode").change(function(){
+
+        mode=$(this).val();
+
+        localStorage.setItem("userViewMode",mode);
+
+        initTable();
+
+        if(mode==="pagination"){
+
+            loadPagination();
+
+        }else{
+
+            loadInfinite(true);
+
+        }
+
+    });
+
 });
 
-function loadUsers() {
-  $.ajax({
-    url: "http://localhost:3000/api/users/all",
-    method: "GET",
+function initTable(){
 
-    success: function (res) {
-      if ($.fn.DataTable.isDataTable("#usersTable")) {
+    if($.fn.DataTable.isDataTable("#usersTable")){
+
         $("#usersTable").DataTable().destroy();
-      }
 
-      let mode = $("#viewMode").val() || "pagination";
+        $("#usersTable tbody").empty();
 
-      table = $("#usersTable").DataTable({
-        destroy: true,
+    }
 
-        data: res.users || [],
+    table=$("#usersTable").DataTable({
 
-        paging: mode === "pagination",
+        paging:mode==="pagination",
 
-        scrollY: mode === "scroll" ? "500px" : false,
+        searching:true,
 
-        scrollCollapse: true,
+        ordering:true,
 
-        scroller: mode === "scroll",
+        info:true,
+
+        pageLength:10,
+
+        lengthChange:false,
+
+        processing:true,
+
+        deferRender:true,
+
+        scrollY:mode==="scroll"?"500px":false,
+
+        scrollCollapse:true,
+
+        data:[],
 
         columns: [
+
           { data: "id" },
           { data: "email" },
           { data: "role" },
           { data: "status" },
 
           {
-            data: "customer",
-            render: (c) => c?.fname || "",
+              data: "customer",
+              render: c => c?.fname || ""
           },
 
           {
-            data: "customer",
-            render: (c) => c?.lname || "",
+              data: "customer",
+              render: c => c?.lname || ""
           },
 
           {
-            data: "customer",
-            render: (c) => c?.phone || "",
+              data: "customer",
+              render: c => c?.phone || ""
           },
 
           {
-            data: "customer",
-            render: (c) => c?.addressline || "",
+              data: "customer",
+              render: c => c?.addressline || ""
           },
 
           {
-            data: "customer",
-            render: (c) => c?.town || "",
+              data: "customer",
+              render: c => c?.town || ""
           },
 
+          // IMAGE COLUMN
           {
-            data: null,
-            render: function (data, type, row) {
-              const customer = row.customer;
-              const imagePath =
-                customer?.image_path ||
-                customer?.profile_image ||
-                customer?.image ||
-                customer?.profileImage ||
-                row.profile_image ||
-                row.image_path ||
-                row.image;
+              data: null,
+              render: function (data, type, row) {
 
-              if (!imagePath) {
-                return "No Image";
+                  const customer = row.customer;
+
+                  const imagePath =
+                      customer?.image_path ||
+                      customer?.profile_image ||
+                      customer?.image ||
+                      customer?.profileImage ||
+                      row.profile_image ||
+                      row.image_path ||
+                      row.image;
+
+                  if (!imagePath) {
+                      return "No Image";
+                  }
+
+                  const normalizedPath = imagePath.startsWith("http")
+                      ? imagePath
+                      : `http://localhost:3000${imagePath.startsWith("/") ? "" : "/"}${imagePath}`;
+
+                  return `
+                      <img
+                          src="${normalizedPath}"
+                          width="50"
+                          height="50"
+                          style="border-radius:50%;object-fit:cover;"
+                      >
+                  `;
               }
-
-              const normalizedPath = imagePath.startsWith("http")
-                ? imagePath
-                : `http://localhost:3000${imagePath.startsWith("/") ? "" : "/"}${imagePath}`;
-
-              return `
-                                <img
-                                    src="${normalizedPath}"
-                                    width="50"
-                                    height="50"
-                                    style="object-fit:cover;border-radius:50%;"
-                                >
-                            `;
-            },
           },
 
           {
-            data: null,
-            render: function (data) {
-              return `
-                                <button onclick='editUser(${JSON.stringify(data)})'>
-                                    Edit
-                                </button>
+              data: null,
+              render: function (data) {
+                  return `
+                      <button onclick='editUser(${JSON.stringify(data)})'>Edit</button>
+                      <button onclick='deleteUser(${data.id})'>Delete</button>
+                  `;
+              }
+          }
 
-                                <button onclick='deleteUser(${data.id})'>
-                                    Delete
-                                </button>
-                            `;
-            },
-          },
-        ],
-      });
-    },
-  });
+      ]
+
+    });
+
+    if(mode==="scroll"){
+
+        attachInfiniteScroll();
+
+    }
+
+}
+
+function loadPagination(){
+
+    $.ajax({
+
+        url:"http://localhost:3000/api/users?start=0&length=100000",
+
+        success:function(res){
+
+            table.clear();
+
+            table.rows.add(res.data||[]);
+
+            table.draw();
+
+        }
+
+    });
+
+}
+
+function loadInfinite(reset=false){
+
+    if(loading||!hasMore)return;
+
+    loading=true;
+
+    if(reset){
+
+        offset=0;
+
+        hasMore=true;
+
+        table.clear().draw();
+
+    }
+
+    $.ajax({
+
+        url:`http://localhost:3000/api/users?start=${offset}&length=${limit}`,
+
+        success:function(res){
+
+            const rows=res.data||[];
+
+            if(rows.length<limit){
+
+                hasMore=false;
+
+            }
+
+            offset+=rows.length;
+
+            table.rows.add(rows).draw(false);
+
+            loading=false;
+
+        },
+
+        error:function(){
+
+            loading=false;
+
+        }
+
+    });
+
+}
+
+function attachInfiniteScroll(){
+
+    setTimeout(function(){
+
+        $(".dataTables_scrollBody")
+
+        .off("scroll")
+
+        .on("scroll",function(){
+
+            if(loading||!hasMore)return;
+
+            if(this.scrollTop+this.clientHeight>=this.scrollHeight-80){
+
+                loadInfinite();
+
+            }
+
+        });
+
+    },200);
+
+}
+
+function resetUsers(){
+
+    offset=0;
+
+    hasMore=true;
+
+    table.clear().draw();
+
+    if(mode==="pagination"){
+
+        loadPagination();
+
+    }else{
+
+        loadInfinite(true);
+
+    }
+
 }
 
 $("#saveCreate").click(function () {
@@ -182,7 +343,7 @@ $("#saveCreate").click(function () {
       $("#createRole").val("User");
       $("#createStatus").val("Active");
 
-      loadUsers();
+      resetUsers();
     },
 
     error: function (xhr) {
@@ -282,7 +443,7 @@ $("#saveEdit").click(function () {
     success: function () {
       alert("Updated successfully.");
       $("#editModal").hide();
-      loadUsers();
+      resetUsers();
     },
 
     error: function (xhr) {
@@ -303,7 +464,7 @@ function deleteUser(id) {
     url: "http://localhost:3000/api/users/delete/" + id,
     method: "DELETE",
     success: function () {
-      loadUsers();
+      resetUsers();
     },
   });
 }

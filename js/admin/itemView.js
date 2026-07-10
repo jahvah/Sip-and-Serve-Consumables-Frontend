@@ -1,141 +1,479 @@
 let table;
 let currentItem = null;
 
-$(document).ready(function () {
-    const savedMode = localStorage.getItem("itemViewMode") || "pagination";
-    $("#viewMode").val(savedMode);
+let mode = localStorage.getItem("itemViewMode") || "pagination";
 
-    loadItems();
+let offset = 0;
+let limit = 10;
+
+let loading = false;
+let hasMore = true;
+
+$(document).ready(function () {
+
+
+    $("#viewMode").val(mode);
+
+
+
+    initTable();
+
+
+
+    if(mode === "pagination"){
+
+        loadPagination();
+
+    }
+    else{
+
+        loadInfinite(true);
+
+    }
+
+
+
     loadCategories();
 
-    $("#viewMode").change(function () {
-        localStorage.setItem("itemViewMode", $(this).val());
-        loadItems();
+
+
+    $("#viewMode").change(function(){
+
+
+        mode=$(this).val();
+
+
+        localStorage.setItem(
+            "itemViewMode",
+            mode
+        );
+
+
+
+        initTable();
+
+
+
+        if(mode==="pagination"){
+
+            loadPagination();
+
+        }
+        else{
+
+            loadInfinite(true);
+
+        }
+
+
     });
 
-    $("#openCreateModal").click(function () {
+
+
+    $("#openCreateModal").click(function(){
         $("#createModal").fadeIn();
     });
 
-    $("#closeCreate").click(function () {
+
+
+    $("#closeCreate").click(function(){
         $("#createModal").fadeOut();
     });
 
-    $("#saveCreate").click(function () {
-        createItem();
-    });
 
-    $("#saveEdit").click(function () {
-        updateItemInfo();
-    });
 
-    $("#btnUpdateMainImage").click(function () {
-        updateMainImage();
-    });
+    $("#saveCreate").click(createItem);
 
-    $("#btnDeleteMainImage").click(function () {
-        deleteMainImage();
-    });
 
-    $("#btnAddImages").click(function () {
-        addGalleryImages();
-    });
+    $("#saveEdit").click(updateItemInfo);
+
+
+    $("#btnUpdateMainImage")
+        .click(updateMainImage);
+
+
+    $("#btnDeleteMainImage")
+        .click(deleteMainImage);
+
+
+    $("#btnAddImages")
+        .click(addGalleryImages);
+
+
+
 });
 
 /* =========================
 LOAD ITEMS
 ========================= */
-function loadItems() {
-    $.ajax({
-        url: "http://localhost:3000/api/items/all",
-        method: "GET",
+function initTable(){
 
-        success: function (res) {
-            let mode = $("#viewMode").val();
 
-            if ($.fn.DataTable.isDataTable("#itemTable")) {
-                $("#itemTable").DataTable().destroy();
-                $("#itemTable tbody").empty();
+    if($.fn.DataTable.isDataTable("#itemTable")){
+
+
+        $("#itemTable")
+        .DataTable()
+        .destroy();
+
+
+
+        $("#itemTable tbody")
+        .empty();
+
+    }
+
+
+
+    table=$("#itemTable").DataTable({
+
+
+        paging:
+        mode==="pagination",
+
+
+        searching:true,
+
+
+        ordering:true,
+
+
+        info:true,
+
+
+        lengthChange:false,
+
+
+        pageLength:10,
+
+
+        deferRender:true,
+
+
+        scrollY:
+        mode==="scroll"
+        ?"500px"
+        :false,
+
+
+        scrollCollapse:true,
+
+
+        data:[],
+
+
+
+        columns:[
+
+
+            {
+                data:"item_id"
+            },
+
+
+            {
+                data:"item_name"
+            },
+
+
+            {
+                data:"description"
+            },
+
+
+            {
+                data:"cost_price"
+            },
+
+
+            {
+                data:"sell_price"
+            },
+
+
+            {
+
+                data:"stock",
+
+                render:function(stock){
+
+                    return stock
+                    ? stock.quantity
+                    : 0;
+
+                }
+
+            },
+
+
+            {
+
+                data:"category",
+
+                render:function(c){
+
+                    return c?.category || "";
+
+                }
+
+            },
+
+
+            {
+
+                data:"image",
+
+                render:function(img){
+
+                    if(!img)
+                        return "No Image";
+
+
+                    return `
+
+                    <img src="http://localhost:3000/${img}"
+                    width="50"
+                    height="50"
+                    style="
+                    object-fit:cover;
+                    border-radius:5px;">
+
+                    `;
+
+                }
+
+            },
+
+
+            {
+
+                data:"images",
+
+                render:function(imgs){
+
+                    if(!imgs || imgs.length===0)
+                        return "No Images";
+
+
+                    return imgs.map(img=>`
+
+                    <img src="http://localhost:3000/${img.image_path}"
+                    width="40"
+                    height="40"
+                    style="
+                    object-fit:cover;
+                    border-radius:5px;
+                    margin-right:3px;">
+
+                    `).join("");
+
+                }
+
+            },
+
+
+            {
+
+                data:null,
+
+                render:function(data){
+
+                    const safe =
+                    encodeURIComponent(
+                        JSON.stringify(data)
+                    );
+
+
+                    return `
+
+                    <button onclick="editItem('${safe}')">
+                    Edit
+                    </button>
+
+
+                    <button onclick="deleteItem(${data.item_id})">
+                    Delete
+                    </button>
+
+                    `;
+
+                }
+
             }
 
-            table = $("#itemTable").DataTable({
-                data: res.items || [],
-                deferRender: true,
 
-                paging: mode === "pagination",
-                scrollY: mode === "scroll" ? "500px" : false,
-                scroller: mode === "scroll",
-                scrollCollapse: true,
+        ]
 
-                columns: [
-                    { data: "item_id" },
-                    { data: "item_name" },
-                    { data: "description" },
-                    { data: "cost_price" },
-                    { data: "sell_price" },
 
-                    {
-                        data: "stock",
-                        render: function (stock) {
-                            return stock ? stock.quantity : 0;
-                        }
-                    },
+    });
 
-                    {
-                        data: "category",
-                        render: function (c) {
-                            return c?.category || "";
-                        }
-                    },
 
-                    {
-                        data: "image",
-                        render: function (img) {
-                            if (!img) return "No Image";
 
-                            return `
-                                <img src="http://localhost:3000/${img}"
-                                     width="50"
-                                     height="50"
-                                     style="object-fit:cover;border-radius:5px;">
-                            `;
-                        }
-                    },
+    if(mode==="scroll"){
 
-                    {
-                        data: "images",
-                        render: function (imgs) {
-                            if (!imgs || imgs.length === 0) return "No Images";
+        attachInfiniteScroll();
 
-                            return imgs.map(img => `
-                                <img src="http://localhost:3000/${img.image_path}"
-                                     width="40"
-                                     height="40"
-                                     style="object-fit:cover;border-radius:5px;margin-right:3px;">
-                            `).join("");
-                        }
-                    },
+    }
 
-                    {
-                        data: null,
-                        render: function (data) {
-                            const safeData = encodeURIComponent(JSON.stringify(data));
 
-                            return `
-                                <button onclick="editItem('${safeData}')">Edit</button>
-                                <button onclick="deleteItem(${data.item_id})">Delete</button>
-                            `;
-                        }
-                    }
-                ]
-            });
+}
+
+
+
+
+function loadPagination(){
+
+
+    $.ajax({
+
+
+        url:
+        "http://localhost:3000/api/items/all",
+
+
+        success:function(res){
+
+
+            table.clear();
+
+
+            table.rows
+            .add(res.items || []);
+
+
+            table.draw();
+
+
+        }
+
+
+    });
+
+
+}
+
+
+
+
+function loadInfinite(reset=false){
+
+
+    if(loading || !hasMore)
+        return;
+
+
+
+    loading=true;
+
+
+
+    if(reset){
+
+
+        offset=0;
+
+        hasMore=true;
+
+
+        table.clear()
+        .draw();
+
+
+    }
+
+
+
+    $.ajax({
+
+
+        url:
+        `http://localhost:3000/api/items?start=${offset}&length=${limit}`,
+
+
+        success:function(res){
+
+
+            const rows =
+            res.items || [];
+
+
+
+            if(rows.length < limit){
+
+                hasMore=false;
+
+            }
+
+
+
+            offset += rows.length;
+
+
+
+            table.rows
+            .add(rows)
+            .draw(false);
+
+
+
+            loading=false;
+
+
         },
 
-        error: function (xhr) {
-            console.log(xhr.responseText);
-            alert("Failed to load items");
+
+        error:function(){
+
+            loading=false;
+
         }
+
+
     });
+
+
+}
+
+
+
+function attachInfiniteScroll(){
+
+
+    setTimeout(function(){
+
+
+        $(".dataTables_scrollBody")
+
+        .off("scroll")
+
+        .on("scroll",function(){
+
+
+            if(loading || !hasMore)
+                return;
+
+
+
+            if(
+                this.scrollTop +
+                this.clientHeight
+                >=
+                this.scrollHeight - 80
+            ){
+
+                loadInfinite();
+
+            }
+
+
+
+        });
+
+
+
+    },200);
+
+
 }
 
 /* =========================

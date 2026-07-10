@@ -42,6 +42,7 @@ function initTable() {
 
     table = $("#reviewTable").DataTable({
 
+
         data: [],
 
         paging: mode === "pagination",
@@ -52,6 +53,7 @@ function initTable() {
         ordering: true,
 
         scrollY: mode === "scroll" ? "500px" : false,
+
         scrollCollapse: mode === "scroll",
 
         columns: [
@@ -168,6 +170,32 @@ function initTable() {
     if (mode === "scroll") {
 
         $("#reviewTable_wrapper .dataTables_scrollBody")
+            .append(`
+                <div id="loadingReviews"
+                style="
+                text-align:center;
+                padding:10px;
+                display:none;">
+                Loading...
+                </div>
+            `);
+
+    }
+
+    table.on("page.dt", function () {
+
+        $("html, body").animate({
+
+            scrollTop:
+            $("#reviewTable").offset().top - 20
+
+        },250);
+
+    });
+
+    if (mode === "scroll") {
+
+        $("#reviewTable_wrapper .dataTables_scrollBody")
             .off("scroll")
             .on("scroll", function () {
 
@@ -202,6 +230,8 @@ function loadReviews(reset = false) {
 
     loading = true;
 
+    $("#loadingReviews").show();
+
     if (reset) {
 
         offset = 0;
@@ -211,13 +241,8 @@ function loadReviews(reset = false) {
 
     }
 
-    let url = "http://localhost:3000/api/reviews/admin";
-
-    if (mode === "scroll") {
-
-        url += `?limit=${limit}&offset=${offset}`;
-
-    }
+    let url =
+    `http://localhost:3000/api/reviews/admin?limit=${limit}&offset=${offset}`;
 
     $.ajax({
 
@@ -253,6 +278,7 @@ function loadReviews(reset = false) {
             }
 
             loading = false;
+            $("#loadingReviews").hide();
 
         },
 
@@ -263,6 +289,7 @@ function loadReviews(reset = false) {
             alert("Failed to load reviews");
 
             loading = false;
+            $("#loadingReviews").hide();
 
         }
 
@@ -279,6 +306,7 @@ function resetReviews() {
 
     offset = 0;
     hasMore = true;
+    loading = false;
 
     initTable();
 
