@@ -5,103 +5,143 @@
 
     <meta charset="UTF-8">
 
-    <title>Verification Link Expired</title>
+    <title>
+        Verification Link Expired
+    </title>
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
 
     <link rel="stylesheet" href="/css/header.css">
 
+    <link rel="stylesheet" href="/css/theme.css">
+
+    <link rel="stylesheet" href="/css/components.css">
+
+    <link rel="stylesheet" href="/css/auth.css">
+
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-            background: #f8f9fa;
-            text-align: center;
-            margin-top: 80px;
-        }
-
-        .card {
-            width: 500px;
-            margin: auto;
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,.15);
-        }
-
-        h1 {
-            color: #ffc107;
-            margin-bottom: 20px;
-        }
-
-        p {
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 18px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            margin-top: 10px;
-            background: #6f4e37;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: 0.2s;
-        }
-
-        .btn:hover {
-            opacity: .9;
-        }
-
-    </style>
 
 </head>
 
+
 <body>
 
-    <div id="header"></div>
 
-    <div class="card">
+<div id="header"></div>
 
-        <h1>⏰ Verification Link Expired</h1>
 
-        <p>
-            Your email verification link has expired.
-        </p>
 
-        <p>
-            For your account's security, verification links are only valid for
-            <strong>24 hours</strong>.
-        </p>
 
-        <p>
-            Please return to the login page and click
-            <strong>"Resend Verification Email"</strong>
-            to receive a new verification link.
-        </p>
+<section class="auth-page">
 
-        <a
-            href="/html/login.html"
-            class="btn">
 
-            Go to Login
+<div class="auth-card">
 
-        </a>
 
-    </div>
+<div class="auth-header">
 
-    <script>
 
-        $("#header").load("/html/header.html", function () {
+<i class="fa-solid fa-clock auth-icon-warning"></i>
 
-            $.getScript("/js/header.js");
 
-        });
+<h2>
+Verification Link Expired
+</h2>
 
-    </script>
+
+</div>
+
+
+
+
+
+<p class="auth-description">
+
+
+Your email verification link has expired.
+
+
+<br><br>
+
+
+For security reasons, verification links are only valid for
+
+<strong>
+24 hours
+</strong>.
+
+
+<br><br>
+
+
+Please return to the login page and request a new verification email.
+
+
+</p>
+
+
+
+
+
+<a
+
+href="/html/login.html"
+
+class="auth-link-btn"
+
+>
+
+
+<i class="fa-solid fa-right-to-bracket"></i>
+
+
+Go to Login
+
+
+</a>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+<script>
+
+
+$("#header").load("/html/header.html", function(){
+
+
+    $.getScript("/js/header.js");
+
+
+});
+
+
+</script>
+
 
 </body>
+
 
 </html>

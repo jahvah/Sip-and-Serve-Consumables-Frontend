@@ -33,7 +33,7 @@ $(document).ready(function () {
                     $("#cartContainer").html("<h3>Your cart is empty.</h3>");
                     $("#totalPrice").html("Total : ₱0");
 
-                    $("#checkoutSection").remove();
+                    $("#checkoutBtn").hide();
                     return;
                 }
 
@@ -55,31 +55,84 @@ $(document).ready(function () {
                     html += `
                         <div class="cart-item" data-id="${item.item_id}">
 
-                            <img src="${image}" width="100">
 
-                            <div class="cart-details">
+                            <img src="${image}">
 
-                                <h3>${item.item_name}</h3>
 
-                                <p>₱${price}</p>
 
-                                <button class="minus">-</button>
+                            <div class="cart-info">
 
-                                <span class="qty">${qty}</span>
 
-                                <button class="plus">+</button>
+                                <h3>
+                                    ${item.item_name}
+                                </h3>
 
-                                <button class="remove">Remove</button>
 
-                                <p>Subtotal : ₱${subtotal}</p>
+
+                                <p class="price">
+                                    ₱${price}
+                                </p>
+
+
+
+                                <div class="quantity-control">
+
+
+                                    <button class="minus">
+
+                                        <i class="fa-solid fa-minus"></i>
+
+                                    </button>
+
+
+
+                                    <span class="qty">
+
+                                        ${qty}
+
+                                    </span>
+
+
+
+                                    <button class="plus">
+
+                                        <i class="fa-solid fa-plus"></i>
+
+                                    </button>
+
+
+                                </div>
+
+
+
+                                <p>
+                                    Subtotal:
+                                    <strong>
+                                        ₱${subtotal}
+                                    </strong>
+                                </p>
+
+
+
+                                <button class="remove-btn remove">
+
+                                    <i class="fa-solid fa-trash"></i>
+
+                                    Remove
+
+                                </button>
+
+
 
                             </div>
+
 
                         </div>
                     `;
                 });
 
                 $("#cartContainer").html(html);
+                $("#checkoutBtn").show();
                 $("#totalPrice").html("Total : ₱" + total);
 
                 // ======================
@@ -89,8 +142,17 @@ $(document).ready(function () {
 
                     $("#totalPrice").after(`
                         <div id="checkoutSection">
-                            <br>
-                            <button id="checkoutBtn">Checkout</button>
+
+                            <button 
+                                id="checkoutBtn"
+                                class="btn btn-primary">
+
+                                <i class="fa-solid fa-credit-card"></i>
+
+                                Proceed to Checkout
+
+                            </button>
+
                         </div>
                     `);
 

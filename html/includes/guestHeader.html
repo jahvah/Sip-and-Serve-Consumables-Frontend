@@ -1,6 +1,16 @@
 <header class="header">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/components.css">
+
   <div class="logo">
-    <a href="html/home.html">☕ SipAndServe</a>
+      <a href="/html/home.html">
+          <i class="fa-solid fa-store"></i>
+          SipAndServe
+      </a>
   </div>
 
   <nav class="nav-links">
@@ -22,13 +32,20 @@
 
     <!-- Logged In -->
     <div id="userMenu" style="display: none">
-      <a href="#">❤️ Wishlist</a>
+      <a href="/html/cart.html"> <i class="fa-solid fa-cart-shopping"></i>
 
-      <a href="/html/cart.html"> 🛒 Cart (<span id="cartCount">0</span>) </a>
+      Cart (<span id="cartCount">0</span>) </a>
 
       <div class="dropdown">
-        <button id="accountBtn">👤 <span id="username"></span> ▼</button>
+        <button class="dropbtn">
 
+            <i class="fa-solid fa-circle-user"></i>
+
+            <span id="username"></span>
+
+            <i class="fa-solid fa-chevron-down"></i>
+
+        </button>
         <div class="dropdown-content">
           <a href="#">My Profile</a>
           <a href="#">Order History</a>

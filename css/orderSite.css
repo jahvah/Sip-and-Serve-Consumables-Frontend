@@ -1,0 +1,359 @@
+/* ==================================
+   Customer Orders
+================================== */
+
+
+.orders-page{
+
+    padding:40px 20px;
+
+}
+
+
+.orders-container{
+
+    max-width:1100px;
+
+    margin:auto;
+
+}
+
+
+
+.page-header{
+
+    text-align:center;
+
+    margin-bottom:40px;
+
+}
+
+
+.page-header h1{
+
+    color:var(--heading);
+
+    font-size:34px;
+
+}
+
+
+.page-header h1 i{
+
+    color:var(--primary);
+
+}
+
+
+.page-header p{
+
+    color:var(--text);
+
+}
+
+
+
+
+
+/* ==============================
+Empty State
+============================== */
+
+
+.empty-orders{
+
+    display:none;
+
+    background:white;
+
+    padding:50px;
+
+    text-align:center;
+
+    border-radius:18px;
+
+    box-shadow:var(--shadow);
+
+}
+
+
+.empty-orders i{
+
+    font-size:50px;
+
+    color:var(--primary);
+
+    margin-bottom:20px;
+
+}
+
+
+
+
+
+/* ==============================
+Order Card
+============================== */
+
+
+.orderCard{
+
+    background:white;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    margin-bottom:30px;
+
+    box-shadow:var(--shadow);
+
+}
+
+
+
+
+
+.orderHeader{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:20px 25px;
+
+    background:#F8FAFC;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+
+
+.orderHeader h3{
+
+    color:var(--heading);
+
+    margin:0;
+
+}
+
+
+
+
+/* ==============================
+Status
+============================== */
+
+
+.status{
+
+    padding:7px 16px;
+
+    border-radius:999px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    color:white;
+
+}
+
+
+
+.Pending{
+
+    background:#F59E0B;
+
+}
+
+
+.Shipped{
+
+    background:#2563EB;
+
+}
+
+
+.Delivered{
+
+    background:#16A34A;
+
+}
+
+
+.Cancelled{
+
+    background:#DC2626;
+
+}
+
+
+
+
+
+/* ==============================
+Order Content
+============================== */
+
+
+.orderInfo{
+
+    padding:25px;
+
+}
+
+
+
+.orderInfo p{
+
+    color:var(--text);
+
+    margin:8px 0;
+
+}
+
+
+
+
+
+
+
+/* ==============================
+Table
+============================== */
+
+
+.orderInfo table{
+
+    margin-top:25px;
+
+    border-radius:12px;
+
+    overflow:hidden;
+
+}
+
+
+
+.orderInfo th{
+
+    background:var(--primary);
+
+}
+
+
+
+.orderInfo td{
+
+    background:white;
+
+}
+
+
+
+
+
+.totalRow{
+
+    margin-top:25px;
+
+    text-align:right;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    color:var(--heading);
+
+}
+
+
+
+
+
+/* ==============================
+Cancel Button
+============================== */
+
+
+.actionArea{
+
+    text-align:right;
+
+    margin-top:20px;
+
+}
+
+
+
+.cancelBtn{
+
+    background:var(--danger);
+
+    color:white;
+
+    border:none;
+
+    padding:12px 20px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+
+
+.cancelBtn:hover{
+
+    background:#B91C1C;
+
+}
+
+
+
+.cancelBtn:disabled{
+
+    opacity:.5;
+
+}
+
+
+
+
+
+
+/* ==============================
+Responsive
+============================== */
+
+
+@media(max-width:800px){
+
+
+.orderHeader{
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:15px;
+
+}
+
+
+.orderInfo table{
+
+    font-size:13px;
+
+}
+
+
+
+}

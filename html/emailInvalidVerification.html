@@ -5,121 +5,130 @@
 
     <meta charset="UTF-8">
 
-    <title>Invalid Verification Link</title>
+    <title>
+        Invalid Verification Link
+    </title>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
 
     <link rel="stylesheet" href="/css/header.css">
 
+    <link rel="stylesheet" href="/css/theme.css">
+
+    <link rel="stylesheet" href="/css/components.css">
+
+    <link rel="stylesheet" href="/css/auth.css">
+
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <style>
-
-        body{
-            font-family:Arial,sans-serif;
-            background:#f8f9fa;
-            text-align:center;
-            margin-top:80px;
-        }
-
-        .card{
-
-            width:500px;
-
-            margin:auto;
-
-            background:white;
-
-            padding:40px;
-
-            border-radius:10px;
-
-            box-shadow:0 5px 15px rgba(0,0,0,.15);
-
-        }
-
-        h1{
-
-            color:#dc3545;
-
-            margin-bottom:20px;
-
-        }
-
-        p{
-
-            color:#555;
-
-            margin-bottom:25px;
-
-        }
-
-        .btn{
-
-            display:inline-block;
-
-            padding:12px 24px;
-
-            background:#6f4e37;
-
-            color:white;
-
-            text-decoration:none;
-
-            border-radius:5px;
-
-        }
-
-        .btn:hover{
-
-            opacity:.9;
-
-        }
-
-    </style>
 
 </head>
 
+
+
 <body>
+
 
 <div id="header"></div>
 
-<div class="card">
 
-    <h1>❌ Invalid Verification Link</h1>
 
-    <p>
 
-        This verification link is invalid, expired,
-        or has already been used.
+<section class="auth-page">
 
-    </p>
 
-    <p>
+    <div class="auth-card">
 
-        If you haven't verified your account yet,
-        you can request another verification email.
 
-    </p>
+        <div class="auth-header">
 
-    <a
-        href="/html/login.html"
-        class="btn">
 
-        Back to Login
+            <i class="fa-solid fa-circle-xmark auth-icon-danger"></i>
 
-    </a>
 
-</div>
+            <h2>
+                Invalid Verification Link
+            </h2>
+
+
+        </div>
+
+
+
+
+
+        <p class="auth-description">
+
+            This verification link is invalid, expired,
+            or has already been used.
+
+            <br><br>
+
+            If you haven't verified your account yet,
+            request another verification email.
+
+        </p>
+
+
+
+
+
+        <a
+
+            href="/html/login.html"
+
+            class="auth-link-btn"
+
+        >
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Back to Login
+
+
+        </a>
+
+
+
+
+    </div>
+
+
+</section>
+
+
+
+
+
 
 <script>
 
-$("#header").load("/html/header.html",function(){
+
+$("#header").load("/html/header.html", function(){
+
 
     $.getScript("/js/header.js");
 
+
 });
+
 
 </script>
 
+
 </body>
+
 
 </html>

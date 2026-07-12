@@ -1,0 +1,302 @@
+/* ===================================
+   Authentication Pages
+=================================== */
+
+
+.auth-page{
+
+    min-height:calc(100vh - 90px);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:40px 20px;
+
+}
+
+
+
+.auth-card{
+
+    width:100%;
+
+    max-width:430px;
+
+    background:white;
+
+    padding:40px;
+
+    border-radius:var(--radius-lg);
+
+    box-shadow:var(--shadow-hover);
+
+}
+
+
+
+
+.auth-header{
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+}
+
+
+
+.auth-header i{
+
+    font-size:42px;
+
+    color:var(--primary);
+
+    margin-bottom:15px;
+
+}
+
+
+
+.auth-header h2{
+
+    color:var(--heading);
+
+    font-size:30px;
+
+}
+
+
+
+.auth-header p{
+
+    color:var(--text);
+
+    margin-top:8px;
+
+}
+
+
+
+
+
+.auth-group{
+
+    margin-bottom:18px;
+
+}
+
+
+
+.auth-group label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-weight:500;
+
+    color:var(--heading);
+
+}
+
+
+
+.auth-group input{
+
+
+    width:100%;
+
+    padding:14px;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    font-family:inherit;
+
+
+}
+
+
+
+
+.auth-group input:focus{
+
+    outline:none;
+
+    border-color:var(--primary);
+
+}
+
+
+
+
+
+.auth-btn{
+
+
+    width:100%;
+
+    padding:14px;
+
+    font-size:16px;
+
+    margin-top:10px;
+
+
+}
+
+
+
+
+.auth-links{
+
+
+    text-align:center;
+
+    margin-top:20px;
+
+
+}
+
+
+
+.auth-links a{
+
+
+    color:var(--primary);
+
+    font-weight:500;
+
+
+}
+
+
+
+.auth-message{
+
+
+    text-align:center;
+
+    margin-top:15px;
+
+    font-weight:500;
+
+
+}
+
+
+
+
+#resendVerificationBtn{
+
+
+    width:100%;
+
+    margin-top:15px;
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#F59E0B;
+
+    color:white;
+
+    cursor:pointer;
+
+
+}
+
+/* ===================================
+   Authentication Result Cards
+=================================== */
+
+
+.auth-icon-success{
+
+    color:var(--success);
+
+    font-size:55px;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.auth-icon-danger{
+
+    color:var(--danger);
+
+    font-size:55px;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.auth-icon-warning{
+
+    color:var(--warning);
+
+    font-size:55px;
+
+    margin-bottom:20px;
+
+}
+
+
+
+
+.auth-description{
+
+    color:var(--text);
+
+    line-height:1.7;
+
+    text-align:center;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.auth-link-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    padding:12px 25px;
+
+    border-radius:12px;
+
+    background:var(--primary);
+
+    color:white;
+
+    transition:.25s;
+
+}
+
+
+
+.auth-link-btn:hover{
+
+    background:var(--primary-hover);
+
+    color:white;
+
+}

@@ -1,52 +1,247 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Login</title>
+
+    <meta charset="UTF-8">
+
+    <title>
+        SipAndServe Login
+    </title>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
 
     <link rel="stylesheet" href="/css/header.css">
 
+    <link rel="stylesheet" href="/css/theme.css">
+
+    <link rel="stylesheet" href="/css/components.css">
+
+    <link rel="stylesheet" href="/css/auth.css">
+
+
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+
+
 </head>
+
+
 <body>
-    
-    <div id="header"></div>
 
-<h2>Login</h2>
 
-<input type="email" id="email" placeholder="Email"><br><br>
+<div id="header"></div>
 
-<input type="password" id="password" placeholder="Password"><br><br>
 
-<button id="loginBtn">
-    Login
-</button>
 
-<p style="margin-top:15px;text-align:center;">
 
-    <a href="/html/forgotPassword.html">
+<section class="auth-page">
 
-        Forgot Password?
 
-    </a>
 
-</p>
+    <div class="auth-card">
 
-<button
-    id="resendVerificationBtn"
-    style="display:none;">
 
-    Resend Verification Email
 
-</button>
+        <div class="auth-header">
 
-<p id="msg"></p>
+
+            <i class="fa-solid fa-mug-hot"></i>
+
+
+
+            <h2>
+                Welcome Back
+            </h2>
+
+
+
+            <p>
+                Login to your SipAndServe account
+            </p>
+
+
+
+        </div>
+
+
+
+
+
+
+        <div class="auth-group">
+
+
+            <label>
+                Email
+            </label>
+
+
+
+            <input
+
+                type="email"
+
+                id="email"
+
+                placeholder="Enter your email"
+
+            >
+
+
+        </div>
+
+
+
+
+
+
+
+        <div class="auth-group">
+
+
+            <label>
+                Password
+            </label>
+
+
+
+            <input
+
+                type="password"
+
+                id="password"
+
+                placeholder="Enter your password"
+
+            >
+
+
+        </div>
+
+
+
+
+
+
+
+        <button
+
+            id="loginBtn"
+
+            class="btn btn-primary auth-btn"
+
+        >
+
+            <i class="fa-solid fa-right-to-bracket"></i>
+
+            Login
+
+
+        </button>
+
+
+
+
+
+
+
+        <button
+
+            id="resendVerificationBtn"
+
+            style="display:none;"
+
+        >
+
+            <i class="fa-solid fa-envelope"></i>
+
+            Resend Verification Email
+
+
+        </button>
+
+
+
+
+
+
+
+        <div class="auth-links">
+
+
+            <a href="/html/forgotPassword.html">
+
+                Forgot Password?
+
+            </a>
+
+
+        </div>
+
+
+
+
+
+
+
+        <p
+
+            id="msg"
+
+            class="auth-message"
+
+        ></p>
+
+
+
+
+
+    </div>
+
+
+
+</section>
+
+
+
+
+
+
+
 <script>
-        $("#header").load("/html/header.html", function () {
-            $.getScript("/js/header.js");
-        });
-    </script>
-<script src="../js/login.js"></script>
+
+
+$("#header").load("/html/header.html", function () {
+
+
+    $.getScript("/js/header.js");
+
+
+});
+
+
+</script>
+
+
+
+
+
+<script src="/js/login.js"></script>
+
+
+
 
 </body>
+
 </html>

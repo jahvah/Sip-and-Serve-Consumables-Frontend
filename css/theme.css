@@ -1,0 +1,104 @@
+/* ==========================================
+   SipAndServe Theme
+========================================== */
+
+:root{
+
+    /* Brand */
+
+    --primary:#2E7D32;
+    --primary-hover:#1B5E20;
+    --primary-light:#E8F5E9;
+
+    /* Background */
+
+    --bg:#F6F8F7;
+    --surface:#FFFFFF;
+
+    /* Text */
+
+    --heading:#1F2937;
+    --text:#4B5563;
+
+    /* Status */
+
+    --success:#16A34A;
+    --warning:#F59E0B;
+    --danger:#DC2626;
+
+    /* Border */
+
+    --border:#E5E7EB;
+
+    /* Radius */
+
+    --radius-sm:8px;
+    --radius:12px;
+    --radius-lg:18px;
+
+    /* Shadow */
+
+    --shadow:
+
+    0 4px 16px rgba(0,0,0,.05);
+
+    --shadow-hover:
+
+    0 10px 28px rgba(0,0,0,.08);
+
+    /* Animation */
+
+    --transition:.25s ease;
+
+}
+
+/* ==========================================
+   Global
+========================================== */
+
+*{
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+
+}
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    background:var(--bg);
+
+    color:var(--text);
+
+    line-height:1.6;
+
+}
+
+img{
+
+    max-width:100%;
+    display:block;
+
+}
+
+a{
+
+    text-decoration:none;
+
+    color:inherit;
+
+}
+
+button{
+
+    font-family:inherit;
+
+}

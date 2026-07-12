@@ -1,186 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
-    <meta charset="UTF-8">
-    <title>My Orders</title>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    <link rel="stylesheet" href="/css/header.css">
+<meta charset="UTF-8">
 
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
-        }
 
-        body {
-            margin: 0;
-            background: #f5f5f5;
-        }
+<title>
+My Orders
+</title>
 
-        .container {
-            width: 95%;
-            max-width: 1100px;
-            margin: 30px auto;
-        }
 
-        h2 {
-            margin-bottom: 20px;
-        }
 
-        .noOrders {
-            background: white;
-            padding: 30px;
-            text-align: center;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,.1);
-            display: none;
-        }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-        .orderCard {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,.1);
-            margin-bottom: 25px;
-            overflow: hidden;
-        }
 
-        .orderHeader {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #f0f0f0;
-            padding: 15px 20px;
-            border-bottom: 1px solid #ddd;
-        }
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
-        .orderHeader h3 {
-            margin: 0;
-        }
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-        .status {
-            padding: 6px 12px;
-            color: white;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: bold;
-        }
 
-        .Pending {
-            background: orange;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
 
-        .Shipped {
-            background: royalblue;
-        }
 
-        .Delivered {
-            background: seagreen;
-        }
 
-        .Cancelled {
-            background: crimson;
-        }
 
-        .orderInfo {
-            padding: 20px;
-        }
+<link rel="stylesheet" href="/css/header.css">
 
-        .orderInfo p {
-            margin: 6px 0;
-        }
+<link rel="stylesheet" href="/css/theme.css">
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
+<link rel="stylesheet" href="/css/components.css">
 
-        table th {
-            background: #333;
-            color: white;
-            padding: 10px;
-        }
+<link rel="stylesheet" href="/css/orderSite.css">
 
-        table td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-        }
 
-        .totalRow {
-            text-align: right;
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 15px;
-        }
 
-        .actionArea {
-            margin-top: 20px;
-            text-align: right;
-        }
 
-        .cancelBtn {
-            background: crimson;
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: .2s;
-        }
 
-        .cancelBtn:hover {
-            background: darkred;
-        }
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-        .cancelBtn:disabled {
-            background: gray;
-            cursor: not-allowed;
-        }
-
-        @media(max-width:800px){
-
-            .orderHeader{
-                flex-direction:column;
-                align-items:flex-start;
-                gap:10px;
-            }
-
-            table{
-                font-size:14px;
-            }
-
-        }
-
-    </style>
 
 </head>
 
+
+
 <body>
 
-    <!-- Header -->
-    <div id="header"></div>
 
-    <div class="container">
 
-        <h2>My Orders</h2>
+<div id="header"></div>
 
-        <div id="noOrders" class="noOrders">
-            <h3>No orders found.</h3>
-            <p>You haven't placed any orders yet.</p>
-        </div>
 
-        <!-- Orders will be inserted here -->
-        <div id="ordersContainer"></div>
 
-    </div>
 
-    <script src="/js/header.js"></script>
-    <script src="/js/customer/orderSite.js"></script>
+
+<section class="orders-page">
+
+
+<div class="orders-container">
+
+
+
+<div class="page-header">
+
+
+<h1>
+
+<i class="fa-solid fa-box"></i>
+
+My Orders
+
+</h1>
+
+
+<p>
+
+Track and manage your SipAndServe purchases
+
+</p>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div id="noOrders" class="empty-orders">
+
+
+<i class="fa-solid fa-cart-shopping"></i>
+
+
+<h3>
+No orders found
+</h3>
+
+
+<p>
+You haven't placed any orders yet.
+</p>
+
+
+<a href="/html/home.html"
+class="btn btn-primary">
+
+Start Shopping
+
+</a>
+
+
+</div>
+
+
+
+
+
+
+<div id="ordersContainer"></div>
+
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+<script src="/js/header.js"></script>
+
+<script src="/js/customer/orderSite.js"></script>
+
+
 
 </body>
+
 
 </html>

@@ -4,9 +4,17 @@
     <meta charset="utf-8" />
     <title>Product Details</title>
 
-    <link rel="stylesheet" href="/css/header.css" />
-    <link rel="stylesheet" href="/css/home.css" />
-    <link rel="stylesheet" href="/css/product.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/theme.css">
+    <link rel="stylesheet" href="/css/components.css">
+
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/product.css">
   </head>
 
   <body>
@@ -74,76 +82,123 @@
               <div>
                 <h1>${item.item_name}</h1>
 
-                <p>${item.description || "No description available."}</p>
+                <div class="category">
+                  ${item.category?.category || "Uncategorized"}
+                </div>
 
-                <p class="price">₱${item.sell_price}</p>
+                <p class="price">
+                  ₱${item.sell_price}
+                </p>
+
+                <p class="description">
+                  ${item.description || "No description available."}
+                </p>
 
                 <div class="quantity-container">
 
-                  <label><strong>Quantity</strong></label>
+                      <label class="section-label">
 
-                  <div class="quantity-controls">
+                          Quantity
 
-                      <button
-                          type="button"
-                          id="decreaseQty"
-                          class="qty-btn"
-                          disabled>
-                          −
-                      </button>
+                      </label>
 
-                      <input
-                          type="number"
-                          id="quantity"
-                          value="1"
-                          min="1"
-                          max="${stockQty}"
-                          readonly>
+                      <div class="quantity-controls">
 
-                      <button
-                          type="button"
-                          id="increaseQty"
-                          class="qty-btn">
-                          +
-                      </button>
+                          <button
+                              type="button"
+                              id="decreaseQty"
+                              class="qty-btn"
+                              disabled>
 
-                  </div>
+                              <i class="fa-solid fa-minus"></i>
 
-                  <small class="stock-text">
+                          </button>
+
+                          <input
+                              type="number"
+                              id="quantity"
+                              value="1"
+                              min="1"
+                              max="${stockQty}"
+                              readonly>
+
+                          <button
+                              type="button"
+                              id="increaseQty"
+                              class="qty-btn">
+
+                              <i class="fa-solid fa-plus"></i>
+
+                          </button>
+
+                      </div>
 
                       ${
                           stockQty > 0
-                          ? `Stock Available: <strong>${stockQty}</strong>`
-                          : `<span class="out-stock">Out of Stock</span>`
+
+                          ?
+
+                          `
+                          <div class="stock-badge">
+
+                              <i class="fa-solid fa-circle-check"></i>
+
+                              <span>${stockQty} in stock</span>
+
+                          </div>
+                          `
+
+                          :
+
+                          `
+                          <div class="stock-badge out">
+
+                              <i class="fa-solid fa-circle-xmark"></i>
+
+                              <span>Out of Stock</span>
+
+                          </div>
+                          `
+
                       }
 
-                  </small>
-
-              </div>
-
-                <p>
-                    <strong>Category:</strong>
-                    ${item.category?.category || "Uncategorized"}
-                </p>
-
+                  </div>
 
                 <div class="actions">
                   <button
-                      class="btn"
+                      class="btn btn-primary"
                       id="addToCartBtn"
                       ${outOfStock ? "disabled" : ""}>
+                      <i class="fa-solid fa-cart-shopping"></i>
                       Add to Cart
                   </button>
 
                   <button
-                      class="btn secondary"
+                      class="btn btn-outline"
                       id="checkoutBtn"
                       ${outOfStock ? "disabled" : ""}>
-                      Checkout
+                      <i class="fa-solid fa-credit-card"></i>
+                      Buy Now
                   </button>
                 </div>
 
-                <h3>Customer Reviews</h3>
+                <div class="review-header">
+
+                    <h3>
+
+                        <i class="fa-solid fa-star"></i>
+
+                        Customer Reviews
+
+                    </h3>
+
+                    <span id="reviewCount">
+
+                        (${item.reviews.length})
+
+                    </span>
+
+                </div>
 
                 <div id="reviews"></div>
 

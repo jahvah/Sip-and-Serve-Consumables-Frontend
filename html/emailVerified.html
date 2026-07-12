@@ -7,109 +7,118 @@
 
     <title>Email Verified</title>
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+
     <link rel="stylesheet" href="/css/header.css">
 
-    <style>
+    <link rel="stylesheet" href="/css/theme.css">
 
-        body{
+    <link rel="stylesheet" href="/css/components.css">
 
-            font-family: Arial, sans-serif;
+    <link rel="stylesheet" href="/css/auth.css">
 
-            text-align:center;
 
-            margin-top:80px;
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-        }
-
-        .card{
-
-            width:500px;
-
-            margin:auto;
-
-            padding:40px;
-
-            border-radius:10px;
-
-            box-shadow:0 0 12px rgba(0,0,0,.15);
-
-            background:white;
-
-        }
-
-        h1{
-
-            color:#28a745;
-
-        }
-
-        a{
-
-            display:inline-block;
-
-            margin-top:25px;
-
-            padding:12px 24px;
-
-            background:#6f4e37;
-
-            color:white;
-
-            text-decoration:none;
-
-            border-radius:5px;
-
-        }
-
-        a:hover{
-
-            opacity:.9;
-
-        }
-
-    </style>
 
 </head>
 
+
 <body>
+
 
 <div id="header"></div>
 
-<div class="card">
 
-    <h1>✔ Email Verified!</h1>
 
-    <p>
 
-        Your email has been successfully verified.
+<section class="auth-page">
 
-    </p>
 
-    <p>
+    <div class="auth-card">
 
-        You may now log in to your account.
 
-    </p>
+        <div class="auth-header">
 
-    <a href="/html/login.html">
 
-        Login
+            <i class="fa-solid fa-circle-check auth-icon-success"></i>
 
-    </a>
 
-</div>
+            <h2>
+                Email Verified!
+            </h2>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        </div>
+
+
+
+
+        <p class="auth-description">
+
+            Your email has been successfully verified.
+
+            <br>
+
+            You may now log in to your account.
+
+        </p>
+
+
+
+
+
+        <a
+
+            href="/html/login.html"
+
+            class="auth-link-btn"
+
+        >
+
+            <i class="fa-solid fa-right-to-bracket"></i>
+
+            Login
+
+
+        </a>
+
+
+
+    </div>
+
+
+</section>
+
+
+
+
 
 <script>
 
-$("#header").load("/html/header.html",function(){
+
+$("#header").load("/html/header.html", function(){
+
 
     $.getScript("/js/header.js");
 
+
 });
 
+
 </script>
+
 
 </body>
 

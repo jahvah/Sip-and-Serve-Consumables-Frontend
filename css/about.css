@@ -1,99 +1,282 @@
-body{
+body {
 
     margin:0;
 
     font-family:Arial, Helvetica, sans-serif;
 
-    background:#f7f7f7;
+    background:#f4f4f4;
 
 }
 
-.hero{
 
-    background:#6f4e37;
+/* =========================
+   HERO
+========================= */
+
+
+.hero {
+
+    background:var(--primary);
 
     color:white;
 
     text-align:center;
 
-    padding:60px 20px;
+    padding:70px 20px;
 
 }
 
-.hero h1{
+
+.hero h1 {
 
     margin:0;
 
-    font-size:40px;
+    font-size:42px;
+
+    font-weight:700;
 
 }
 
-.hero p{
 
-    margin-top:15px;
+.hero p {
+
+    margin-top:18px;
 
     font-size:18px;
 
+    line-height:1.7;
+
 }
 
-.about-section{
 
-    width:85%;
+
+
+
+/* =========================
+   SECTIONS
+========================= */
+
+
+.about-section {
+
+
+    max-width:1100px;
 
     margin:40px auto;
 
-}
-
-.about-section h2{
-
-    color:#6f4e37;
-
-    margin-bottom:15px;
-
-}
-
-.cards{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-
-    gap:20px;
-
-}
-
-.card{
 
     background:white;
 
-    padding:20px;
 
-    border-radius:8px;
+    padding:35px;
 
-    box-shadow:0 2px 8px rgba(0,0,0,.1);
 
-}
+    border-radius:20px;
 
-.card h3{
 
-    margin-top:0;
+    box-shadow:var(--shadow);
 
-    color:#8B4513;
 
 }
 
-.about-section ul{
 
-    line-height:2;
 
-    padding-left:25px;
+.about-section h2 {
+
+
+    color:var(--heading);
+
+
+    margin-bottom:20px;
+
+
+    font-size:28px;
+
 
 }
 
-.about-section p{
+
+
+.about-section p {
+
+
+    color:var(--text);
+
+
+    line-height:1.8;
+
 
     text-align:justify;
 
-    line-height:1.8;
+
+}
+
+
+
+
+
+/* =========================
+   PRODUCT CARDS
+========================= */
+
+
+.cards {
+
+
+    display:grid;
+
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(230px,1fr));
+
+
+    gap:25px;
+
+
+}
+
+
+
+.card {
+
+
+    background:#ffffff;
+
+
+    padding:25px;
+
+
+    border-radius:16px;
+
+
+    border:1px solid var(--border);
+
+
+    transition:.25s;
+
+
+}
+
+
+
+.card:hover {
+
+
+    transform:translateY(-5px);
+
+
+    box-shadow:var(--shadow);
+
+
+}
+
+
+
+.card h3 {
+
+
+    color:var(--primary);
+
+
+    margin-top:0;
+
+
+    font-size:20px;
+
+
+}
+
+
+
+.card p {
+
+
+    text-align:left;
+
+
+    line-height:1.6;
+
+
+}
+
+
+
+/* =========================
+   FEATURE LIST
+========================= */
+
+
+.about-section ul {
+
+
+    padding-left:25px;
+
+
+}
+
+
+
+.about-section li {
+
+
+    margin-bottom:12px;
+
+
+    color:var(--text);
+
+
+    line-height:1.6;
+
+
+}
+
+
+
+/* =========================
+   DEVELOPER SECTION
+========================= */
+
+
+.about-section strong {
+
+
+    color:var(--primary);
+
+
+}
+
+
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+
+@media(max-width:700px){
+
+
+.hero h1 {
+
+    font-size:30px;
+
+}
+
+
+.about-section {
+
+    margin:20px;
+
+    padding:25px;
+
+}
+
+
+.about-section h2 {
+
+    font-size:24px;
+
+}
+
 
 }

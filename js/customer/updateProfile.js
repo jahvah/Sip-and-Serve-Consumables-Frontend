@@ -20,7 +20,29 @@ $(document).ready(function () {
 
     });
 
+    $("#profileImage").change(function(){
+
+        const file = this.files[0];
+
+        if(file){
+
+            const reader = new FileReader();
+
+            reader.onload=function(e){
+
+                $("#previewImage")
+                .attr("src",e.target.result);
+
+            }
+
+            reader.readAsDataURL(file);
+
+        }
+
+    });
+
 });
+
 
 
 /* =========================
