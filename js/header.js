@@ -38,11 +38,22 @@ $(document).ready(function () {
     }
 
     // =========================
+    // LOAD ADMIN INFO
+    // =========================
+    function loadAdminInfo() {
+
+        $("#username").text(userData.email);
+
+    }
+
+    // =========================
     // ADMIN HEADER
     // =========================
     if (userData.role === "Admin") {
 
         $("#header").load("/html/includes/adminHeader.html", function () {
+
+            $("#username").text(userData.email);
 
             $("#logoutBtn").click(function (e) {
                 e.preventDefault();
