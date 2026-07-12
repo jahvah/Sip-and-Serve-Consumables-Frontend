@@ -55,6 +55,18 @@ $(document).ready(function () {
 
             $("#username").text(userData.email);
 
+            const currentPage = window.location.pathname.split("/").pop();
+
+            $("nav a").each(function () {
+
+                if ($(this).attr("href").includes(currentPage)) {
+
+                    $(this).addClass("active");
+
+                }
+
+            });
+
             $("#logoutBtn").click(function (e) {
                 e.preventDefault();
 

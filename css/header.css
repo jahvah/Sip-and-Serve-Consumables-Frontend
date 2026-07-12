@@ -276,3 +276,89 @@ Responsive
     }
 
 }
+
+.admin-badge{
+
+    margin-left:10px;
+
+    background:#16a34a;
+
+    color:white;
+
+    font-size:11px;
+
+    font-weight:600;
+
+    padding:3px 8px;
+
+    border-radius:20px;
+
+    text-transform:uppercase;
+
+}
+
+.admin-user{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    line-height:1.2;
+
+}
+
+.admin-user strong{
+
+    font-size:13px;
+
+    color:#1f2937;
+
+}
+
+.admin-user small{
+
+    color:#6b7280;
+
+    font-size:12px;
+
+}
+
+.header nav a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+}
+
+.header nav a i{
+
+    width:18px;
+
+    text-align:center;
+
+}
+
+.dropdown-content a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+.header nav a.active{
+
+    background:#16a34a;
+
+    color:white;
+
+    border-radius:10px;
+
+}

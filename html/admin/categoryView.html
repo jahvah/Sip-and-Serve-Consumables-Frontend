@@ -22,80 +22,221 @@
 <link rel="stylesheet" href="/css/components.css">
 <link rel="stylesheet" href="/css/categoryView.css">
 
-<style>
-
-.dataTables_scrollBody {
-    max-height:500px !important;
-}
-
-.view-mode {
-    margin:10px 0;
-}
-
-</style>
-
 </head>
 
 <body>
 
 <div id="header"></div>
 
-<div class="view-mode">
-    <label>View Mode:</label>
-    <select id="viewMode">
-        <option value="pagination">Pagination</option>
-        <option value="scroll">Scroll</option>
-    </select>
-</div>
+<div class="container mt-4">
 
-<div class="container">
+    <!-- HERO -->
+    <section class="page-hero">
 
-    <button id="openCreateModal">Create Category</button>
+        <div>
 
-    <h2>Category Management</h2>
+            <h1>
+                Category Management
+            </h1>
 
-    <table id="categoryTable" class="display">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Category</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+            <p>
+                Organize products by creating and managing categories.
+            </p>
 
-</div>
+        </div>
 
-<!-- EDIT MODAL -->
-<div class="modal" id="editModal">
-    <div class="modal-content">
+        <button
+            id="openCreateModal"
+            class="btn btn-success hero-btn">
 
-        <h3>Edit Category</h3>
+            <i class="fa-solid fa-plus"></i>
 
-        <input type="hidden" id="editId">
+            Create Category
 
-        <label>Category</label>
-        <input type="text" id="editCategory">
+        </button>
 
-        <button id="saveEdit">Save</button>
-        <button onclick="closeModal()">Close</button>
+    </section>
+
+    <!-- TABLE CARD -->
+
+    <div class="table-card">
+
+        <div class="table-toolbar">
+
+            <div>
+
+                <h2>
+
+                    Categories
+
+                </h2>
+
+                <small>
+
+                    Manage all available product categories.
+
+                </small>
+
+            </div>
+
+            <div class="view-mode">
+
+                <label>
+
+                    View Mode
+
+                </label>
+
+                <select id="viewMode">
+
+                    <option value="pagination">
+
+                        Pagination
+
+                    </option>
+
+                    <option value="scroll">
+
+                        Infinite Scroll
+
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <table
+            id="categoryTable"
+            class="display"
+            style="width:100%">
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Category</th>
+
+                    <th width="180">
+
+                        Actions
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody></tbody>
+
+        </table>
 
     </div>
+
 </div>
 
-<!-- CREATE MODAL -->
+<!-- =========================
+EDIT MODAL
+========================= -->
+
+<div class="modal" id="editModal">
+
+    <div class="modal-content">
+
+        <h3>
+
+            <i class="fa-solid fa-pen"></i>
+
+            Edit Category
+
+        </h3>
+
+        <input
+            type="hidden"
+            id="editId">
+
+        <label>
+
+            Category Name
+
+        </label>
+
+        <input
+            type="text"
+            id="editCategory">
+
+        <div class="modal-actions">
+
+            <button
+                id="saveEdit"
+                class="btn btn-success">
+
+                Save Changes
+
+            </button>
+
+            <button
+                onclick="closeModal()"
+                class="btn btn-secondary">
+
+                Close
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =========================
+CREATE MODAL
+========================= -->
+
 <div class="modal" id="createModal">
 
     <div class="modal-content">
 
-        <h3>Create Category</h3>
+        <h3>
 
-        <label>Category</label>
-        <input type="text" id="createCategory">
+            <i class="fa-solid fa-folder-plus"></i>
 
-        <button id="saveCreate">Create</button>
-        <button id="closeCreate">Close</button>
+            Create Category
+
+        </h3>
+
+        <label>
+
+            Category Name
+
+        </label>
+
+        <input
+            type="text"
+            id="createCategory">
+
+        <div class="modal-actions">
+
+            <button
+                id="saveCreate"
+                class="btn btn-success">
+
+                Create Category
+
+            </button>
+
+            <button
+                id="closeCreate"
+                class="btn btn-secondary">
+
+                Close
+
+            </button>
+
+        </div>
 
     </div>
 
@@ -104,5 +245,6 @@
 <script src="/js/admin/adminAuth.js"></script>
 <script src="/js/admin/categoryView.js"></script>
 <script src="/js/header.js"></script>
+
 </body>
 </html>

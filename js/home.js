@@ -345,12 +345,6 @@ function renderProducts(items) {
                 value="1">
 
             <button
-                class="viewBtn"
-                data-id="${item.item_id}">
-                View Images
-            </button>
-
-            <button
                 class="cartBtn"
                 data-id="${item.item_id}">
                 Add to Cart

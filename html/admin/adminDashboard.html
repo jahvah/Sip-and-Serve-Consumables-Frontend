@@ -26,7 +26,7 @@
     <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 
     <link rel="stylesheet" href="/css/userView.css" />
-
+    <link rel="stylesheet" href="/css/adminDashboard.css">
     <link rel="stylesheet" href="/css/theme.css">
     <link rel="stylesheet" href="/css/components.css">
   </head>
@@ -37,48 +37,123 @@
 
     <div class="container mt-4">
 
-        <h2 class="mb-4">
-            Sip & Serve Analytics Dashboard
-        </h2>
+        <section class="dashboard-hero">
+
+    <div>
+
+        <h1>Dashboard</h1>
+
+        <p>
+
+            Welcome back, Administrator.
+
+            Here's an overview of your store.
+
+        </p>
+
+    </div>
+
+    <div class="dashboard-date">
+
+        <i class="fa-solid fa-calendar-days"></i>
+
+        <span id="todayDate"></span>
+
+    </div>
+
+</section>
 
         <div class="row mb-4">
 
-          <div class="col-md-3">
-              <div class="card border-left-primary shadow">
-                  <div class="card-body text-center">
-                      <h6>Total Users</h6>
-                      <h2 id="totalUsers">0</h2>
-                  </div>
-              </div>
-          </div>
+    <div class="col-lg-3 col-md-6 mb-4">
 
-          <div class="col-md-3">
-              <div class="card border-left-success shadow">
-                  <div class="card-body text-center">
-                      <h6>Total Items</h6>
-                      <h2 id="totalItems">0</h2>
-                  </div>
-              </div>
-          </div>
+        <div class="summary-card users">
 
-          <div class="col-md-3">
-              <div class="card border-left-warning shadow">
-                  <div class="card-body text-center">
-                      <h6>Total Orders</h6>
-                      <h2 id="totalOrders">0</h2>
-                  </div>
-              </div>
-          </div>
+            <div>
 
-          <div class="col-md-3">
-              <div class="card border-left-danger shadow">
-                  <div class="card-body text-center">
-                      <h6>Total Sales</h6>
-                      <h2 id="totalSales">₱0.00</h2>
-                  </div>
-              </div>
-          </div>
+                <p>Total Users</p>
+
+                <h2 id="totalUsers">0</h2>
+
+            </div>
+
+            <div class="summary-icon">
+
+                <i class="fa-solid fa-users"></i>
+
+            </div>
+
         </div>
+
+    </div>
+
+    <div class="col-lg-3 col-md-6 mb-4">
+
+        <div class="summary-card items">
+
+            <div>
+
+                <p>Total Items</p>
+
+                <h2 id="totalItems">0</h2>
+
+            </div>
+
+            <div class="summary-icon">
+
+                <i class="fa-solid fa-box"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3 col-md-6 mb-4">
+
+        <div class="summary-card orders">
+
+            <div>
+
+                <p>Total Orders</p>
+
+                <h2 id="totalOrders">0</h2>
+
+            </div>
+
+            <div class="summary-icon">
+
+                <i class="fa-solid fa-bag-shopping"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-3 col-md-6 mb-4">
+
+        <div class="summary-card sales">
+
+            <div>
+
+                <p>Total Sales</p>
+
+                <h2 id="totalSales">₱0.00</h2>
+
+            </div>
+
+            <div class="summary-icon">
+
+                <i class="fa-solid fa-peso-sign"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
         <div class="row">
 

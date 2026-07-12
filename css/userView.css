@@ -1,147 +1,663 @@
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f9;
-    margin: 0;
-    padding: 0;
+/* =====================================================
+   GENERAL
+===================================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-/* Container */
-.container {
-    width: 95%;
-    margin: 20px auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+body{
+
+    font-family:"Poppins",sans-serif;
+
+    background:#f6f8fb;
+
+    color:#1f2937;
+
 }
 
-/* Title */
-h2 {
-    margin-bottom: 15px;
+.container{
+
+    width:95%;
+
+    max-width:1600px;
+
+    margin:30px auto;
+
 }
 
-/* DataTable */
-table.dataTable {
-    width: 100% !important;
-    border-collapse: collapse;
+/* =====================================================
+   HERO
+===================================================== */
+
+.page-hero{
+
+    background:linear-gradient(
+        135deg,
+        #15803d,
+        #22c55e
+    );
+
+    color:white;
+
+    border-radius:22px;
+
+    padding:35px 40px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.12);
+
 }
 
-/* Table header */
-table.dataTable thead {
-    background: #2c3e50;
-    color: white;
+.page-hero h1{
+
+    font-size:34px;
+
+    font-weight:700;
+
+    margin-bottom:10px;
+
 }
 
-table.dataTable thead th {
-    padding: 10px;
+.page-hero p{
+
+    opacity:.95;
+
+    font-size:15px;
+
 }
 
-/* Table rows */
-table.dataTable tbody td {
-    padding: 10px;
-    text-align: center;
-}
+.hero-btn{
 
-/* Buttons */
-button {
-    padding: 5px 10px;
-    margin: 2px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
+    font-size:15px;
 
-/* Edit button */
-button[onclick^="editUser"] {
-    background: #3498db;
-    color: white;
-}
+    padding:14px 24px;
 
-/* Delete button */
-button[onclick^="deleteUser"] {
-    background: #e74c3c;
-    color: white;
-}
-
-/* Modal background */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    justify-content: center;
-    align-items: center;
-}
-
-/* Modal box */
-.modal-content {
-    background: white;
-    padding: 20px;
-    width: 400px;
-    border-radius: 8px;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-/* Inputs */
-.modal-content input,
-.modal-content select {
-    width: 100%;
-    padding: 8px;
-    margin: 5px 0 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-/* Save button */
-#saveEdit {
-    background: #27ae60;
-    color: white;
-}
-
-/* Close button */
-.modal-content button:last-child {
-    background: #7f8c8d;
-    color: white;
-}
-
-/* Images */
-img {
-    border-radius: 5px;
-}
-
-.card{
     border-radius:12px;
+
 }
 
-.card h2{
-    font-weight:bold;
-    margin-top:10px;
+/* =====================================================
+   TABLE CARD
+===================================================== */
+
+.table-card{
+
+    background:white;
+
+    border-radius:22px;
+
+    padding:25px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.06);
+
 }
 
-.border-left-primary{
-    border-left:5px solid #4e73df;
+.table-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+    flex-wrap:wrap;
+
+    gap:20px;
+
 }
 
-.border-left-success{
-    border-left:5px solid #1cc88a;
+.table-header h2{
+
+    font-size:25px;
+
+    font-weight:700;
+
+    color:#111827;
+
+    margin-bottom:6px;
+
 }
 
-.border-left-warning{
-    border-left:5px solid #f6c23e;
+.table-header h2 i{
+
+    color:#16a34a;
+
+    margin-right:8px;
+
 }
 
-.border-left-danger{
-    border-left:5px solid #e74a3b;
+.table-header p{
+
+    color:#6b7280;
+
+    margin:0;
+
+}
+
+/* =====================================================
+   VIEW MODE
+===================================================== */
+
+.view-mode{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+.view-mode label{
+
+    font-weight:600;
+
+    color:#374151;
+
+}
+
+.view-mode select{
+
+    min-width:170px;
+
+}
+
+/* =====================================================
+   INPUTS
+===================================================== */
+
+input,
+select,
+textarea{
+
+    width:100%;
+
+    padding:11px 14px;
+
+    border:1px solid #d1d5db;
+
+    border-radius:10px;
+
+    font-size:14px;
+
+    transition:.25s;
+
+    font-family:inherit;
+
+    background:white;
+
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+
+    border-color:#16a34a;
+
+    outline:none;
+
+    box-shadow:0 0 0 3px rgba(34,197,94,.18);
+
+}
+
+/* =====================================================
+   DATATABLE
+===================================================== */
+
+table.dataTable{
+
+    width:100%!important;
+
+    border-collapse:collapse;
+
+}
+
+table.dataTable thead{
+
+    background:#15803d;
+
+    color:white;
+
+}
+
+table.dataTable thead th{
+
+    padding:14px;
+
+    border:none;
+
+    font-weight:600;
+
+}
+
+table.dataTable tbody td{
+
+    padding:14px;
+
+    vertical-align:middle;
+
+}
+
+table.dataTable tbody tr{
+
+    transition:.2s;
+
+}
+
+table.dataTable tbody tr:hover{
+
+    background:#f0fdf4;
+
+}
+
+.dataTables_wrapper{
+
+    margin-top:15px;
+
+}
+
+.dataTables_filter input{
+
+    border-radius:8px;
+
+    border:1px solid #ddd;
+
+}
+
+.dataTables_length select{
+
+    border-radius:8px;
+
+}
+
+.dataTables_paginate .paginate_button{
+
+    border-radius:8px!important;
+
 }
 
 .dataTables_scrollBody{
-    max-height:500px !important;
+
+    max-height:550px!important;
+
 }
 
-.view-mode{
-    margin:10px 0;
+/* =====================================================
+   USER IMAGE
+===================================================== */
+
+table img{
+
+    width:60px;
+
+    height:60px;
+
+    object-fit:cover;
+
+    border-radius:50%;
+
+    border:3px solid #e5e7eb;
+
+}
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+button{
+
+    cursor:pointer;
+
+    border:none;
+
+    transition:.25s;
+
+    font-family:inherit;
+
+}
+
+.btn{
+
+    border-radius:10px;
+
+    padding:11px 20px;
+
+    font-weight:600;
+
+}
+
+.btn-success{
+
+    background:#16a34a;
+
+    color:white;
+
+}
+
+.btn-success:hover{
+
+    background:#15803d;
+
+}
+
+.btn-primary{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+.btn-primary:hover{
+
+    background:#1d4ed8;
+
+}
+
+.btn-danger{
+
+    background:#dc2626;
+
+    color:white;
+
+}
+
+.btn-danger:hover{
+
+    background:#b91c1c;
+
+}
+
+.btn-secondary{
+
+    background:#6b7280;
+
+    color:white;
+
+}
+
+.btn-secondary:hover{
+
+    background:#4b5563;
+
+}
+
+/* =====================================================
+   ACTION BUTTONS INSIDE TABLE
+===================================================== */
+
+table button{
+
+    padding:8px 14px;
+
+    border-radius:8px;
+
+    color:white;
+
+    margin:2px;
+
+    font-size:13px;
+
+}
+
+table button:first-child{
+
+    background:#2563eb;
+
+}
+
+table button:first-child:hover{
+
+    background:#1d4ed8;
+
+}
+
+table button:last-child{
+
+    background:#dc2626;
+
+}
+
+table button:last-child:hover{
+
+    background:#b91c1c;
+
+}
+
+/* =====================================================
+   MODALS
+===================================================== */
+
+.modal{
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.45);
+
+    z-index:9999;
+
+    overflow:auto;
+
+    padding:40px 15px;
+
+}
+
+.modal-content{
+
+    background:white;
+
+    width:95%;
+
+    max-width:850px;
+
+    margin:auto;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    animation:popup .25s ease;
+
+    box-shadow:0 20px 50px rgba(0,0,0,.18);
+
+}
+
+.large-modal{
+
+    max-width:900px;
+
+}
+
+@keyframes popup{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(30px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:none;
+
+    }
+
+}
+
+/* =====================================================
+   MODAL HEADER
+===================================================== */
+
+.modal-header{
+
+    background:#16a34a;
+
+    color:white;
+
+    padding:20px 30px;
+
+}
+
+.modal-header h3{
+
+    font-size:23px;
+
+    margin:0;
+
+}
+
+.modal-body{
+
+    padding:28px;
+
+}
+
+.modal-footer{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:12px;
+
+    padding:20px 28px;
+
+    border-top:1px solid #eee;
+
+}
+
+/* =====================================================
+   FORM GRID
+===================================================== */
+
+.form-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:20px;
+
+}
+
+.form-grid label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-weight:600;
+
+    color:#374151;
+
+}
+
+.full-width{
+
+    grid-column:1/-1;
+
+}
+
+/* =====================================================
+   HR
+===================================================== */
+
+hr{
+
+    border:none;
+
+    border-top:1px solid #e5e7eb;
+
+    margin:28px 0;
+
+}
+
+/* =====================================================
+   READONLY
+===================================================== */
+
+input[readonly]{
+
+    background:#f3f4f6;
+
+}
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:900px){
+
+    .page-hero{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:20px;
+
+    }
+
+    .table-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+    .form-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .modal-content{
+
+        width:98%;
+
+    }
+
+}
+
+@media(max-width:600px){
+
+    .page-hero{
+
+        padding:28px;
+
+    }
+
+    .page-hero h1{
+
+        font-size:28px;
+
+    }
+
+    .table-card{
+
+        padding:18px;
+
+    }
+
 }

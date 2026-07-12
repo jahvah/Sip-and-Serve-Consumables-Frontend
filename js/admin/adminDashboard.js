@@ -7,6 +7,29 @@ $(document).ready(function () {
     loadPieChart();
 });
 
+const options = {
+
+    weekday: "long",
+
+    year: "numeric",
+
+    month: "long",
+
+    day: "numeric"
+
+};
+
+$("#todayDate").text(
+
+    new Date().toLocaleDateString(
+
+        "en-US",
+
+        options
+
+    )
+
+);
 
 function loadSummary(){
 

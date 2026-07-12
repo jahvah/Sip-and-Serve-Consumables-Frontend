@@ -67,28 +67,89 @@ function loadPending() {
                 : '/img/no-image.png';
 
             html += `
-            <div class="review-card d-flex justify-content-between align-items-center">
 
-                <div class="d-flex align-items-center">
+                <div class="pending-card shadow-card">
 
-                    <img src="${img}" class="item-img mr-3">
+                    <div class="pending-left">
 
-                    <div>
-                        <b>${p.item_name || ""}</b><br>
-                        Qty: ${p.quantity}<br>
-                        Delivered: ${p.date_delivered || ""}
+                        <img
+
+                            src="${img}"
+
+                            class="pending-image">
+
+                        <div>
+
+                            <h4>
+
+                                ${p.item_name}
+
+                            </h4>
+
+                            <p>
+
+                                Quantity:
+                                ${p.quantity}
+
+                            </p>
+
+                            <small>
+
+                                Delivered
+
+                                ${p.date_delivered || ""}
+
+                            </small>
+
+                        </div>
+
                     </div>
+
+                    <button
+
+                        class="btn btn-primary"
+
+                        onclick="openCreate(${p.orderinfo_id},${p.item_id})">
+
+                        <i class="fa-solid fa-pen"></i>
+
+                        Write Review
+
+                    </button>
+
                 </div>
 
-                <button class="btn btn-primary btn-sm"
-                    onclick="openCreate(${p.orderinfo_id}, ${p.item_id})">
-                    Write Review
-                </button>
-
-            </div>`;
+                `;
         });
 
-        $("#pendingContainer").html(html);
+        if(!html){
+
+            html=`
+
+            <div class="empty-state">
+
+            <i class="fa-solid fa-circle-check"></i>
+
+            <h3>
+
+            You're all caught up!
+
+            </h3>
+
+            <p>
+
+            No products are waiting for a review.
+
+            </p>
+
+            </div>
+
+            `;
+
+            }
+
+            $("#pendingContainer").html(html);
+        $("#pendingCount").text(res.pending.length);
 
     }).fail(err => console.log(err));
 }
@@ -112,31 +173,131 @@ function loadReviews() {
                 }
             });
 
+            const itemImage =
+
+                r.item?.image
+
+                ?
+
+                `${API}/${r.item.image}`
+
+                :
+
+                "/img/no-image.png";
+
+                const stars =
+
+                "★".repeat(r.rating || 0)
+
+                +
+
+                "☆".repeat(5-(r.rating||0));
+
             html += `
-            <div class="review-card">
 
-                <b>${r.item?.item_name || "Unknown Item"}</b><br>
+                <div class="review-top">
 
-                ${"★".repeat(r.rating || 0)}${"☆".repeat(5 - (r.rating || 0))}<br>
+                <img
 
-                <p>${r.review_text || ""}</p>
+                src="${itemImage}"
 
-                <div>${images}</div>
+                class="review-product-image">
 
-                <button class="btn btn-sm btn-warning mt-2"
-                    onclick="openEditById(${r.review_id})">
-                    Edit
+                <div class="review-info">
+
+                <h4>
+
+                ${r.item?.item_name}
+
+                </h4>
+
+                <div class="rating">
+
+                ${stars}
+
+                </div>
+
+                </div>
+
+                </div>
+
+                <p class="review-text">
+
+                ${r.review_text || ""}
+
+                </p>
+
+                <div class="review-gallery">
+
+                ${images}
+
+                </div>
+
+                <div class="review-actions">
+
+                <button
+
+                class="btn btn-outline-warning"
+
+                onclick="openEditById(${r.review_id})">
+
+                <i class="fa-solid fa-pen"></i>
+
+                Edit
+
                 </button>
 
-                <button class="btn btn-sm btn-info mt-2"
-                    onclick="openViewById(${r.review_id})">
-                    View
+                <button
+
+                class="btn btn-outline-primary"
+
+                onclick="openViewById(${r.review_id})">
+
+                <i class="fa-solid fa-eye"></i>
+
+                View
+
                 </button>
 
-            </div>`;
+                </div>
+
+                </div>
+
+                `;
         });
 
-        $("#reviewContainer").html(html);
+        if(!html){
+
+            html=`
+
+                <div class="empty-state">
+
+                <div class="empty-icon">
+
+                <i class="fa-regular fa-star"></i>
+
+                </div>
+
+                <h3>
+
+                No Reviews Yet
+
+                </h3>
+
+                <p>
+
+                Your submitted reviews will appear here once you've reviewed a purchased product.
+
+                </p>
+
+                </div>
+
+                `;
+
+            }
+
+            $("#reviewContainer").html(html);
+        $("#reviewCount").text(res.reviews.length);
 
     }).fail(err => console.log(err));
 }
@@ -294,16 +455,38 @@ function openView(r) {
     });
 
     $("#view_content").html(`
-        <h5>${r.item?.item_name || "Unknown Item"}</h5>
 
-        <p>
-            ${"★".repeat(r.rating || 0)}${"☆".repeat(5 - (r.rating || 0))}
-        </p>
+<div class="view-review">
 
-        <p>${r.review_text || ""}</p>
+<h3>
 
-        <div>${images}</div>
-    `);
+${r.item?.item_name}
+
+</h3>
+
+<div class="rating">
+
+${"★".repeat(r.rating)}
+
+${"☆".repeat(5-r.rating)}
+
+</div>
+
+<p>
+
+${r.review_text}
+
+</p>
+
+<div class="review-gallery">
+
+${images}
+
+</div>
+
+</div>
+
+`);
 
     $("#viewModal").modal("show");
 }
