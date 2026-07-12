@@ -39,11 +39,68 @@ $("#loginBtn").click(function () {
 
         error: function (err) {
 
+            const response = err.responseJSON;
+
             $("#msg").css("color", "red");
 
             $("#msg").text(
-                err.responseJSON?.message || "Login failed"
+                response?.message || "Login failed"
             );
+
+            if (response?.verified === false) {
+
+                $("#resendVerificationBtn").show();
+
+            }
+            else {
+
+                $("#resendVerificationBtn").hide();
+
+            }
+
+        }
+
+    });
+
+});
+
+$("#resendVerificationBtn").click(function(){
+
+    $.ajax({
+
+        url:
+"http://localhost:3000/api/users/resend-verification",
+
+        method:"POST",
+
+        contentType:"application/json",
+
+        data:JSON.stringify({
+
+            email:$("#email").val()
+
+        }),
+
+        success:function(res){
+
+            $("#msg")
+                .css("color","green")
+                .text(res.message);
+
+        },
+
+        error:function(err){
+
+            $("#msg")
+                .css("color","red")
+                .text(
+
+                    err.responseJSON?.message ||
+
+                    "Unable to resend email."
+
+                );
+
         }
 
     });

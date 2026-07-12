@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Verification Link Expired</title>
+
+    <link rel="stylesheet" href="/css/header.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .card {
+            width: 500px;
+            margin: auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.15);
+        }
+
+        h1 {
+            color: #ffc107;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin-top: 10px;
+            background: #6f4e37;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            opacity: .9;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div id="header"></div>
+
+    <div class="card">
+
+        <h1>⏰ Verification Link Expired</h1>
+
+        <p>
+            Your email verification link has expired.
+        </p>
+
+        <p>
+            For your account's security, verification links are only valid for
+            <strong>24 hours</strong>.
+        </p>
+
+        <p>
+            Please return to the login page and click
+            <strong>"Resend Verification Email"</strong>
+            to receive a new verification link.
+        </p>
+
+        <a
+            href="/html/login.html"
+            class="btn">
+
+            Go to Login
+
+        </a>
+
+    </div>
+
+    <script>
+
+        $("#header").load("/html/header.html", function () {
+
+            $.getScript("/js/header.js");
+
+        });
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Email Verified</title>
+
+    <link rel="stylesheet" href="/css/header.css">
+
+    <style>
+
+        body{
+
+            font-family: Arial, sans-serif;
+
+            text-align:center;
+
+            margin-top:80px;
+
+        }
+
+        .card{
+
+            width:500px;
+
+            margin:auto;
+
+            padding:40px;
+
+            border-radius:10px;
+
+            box-shadow:0 0 12px rgba(0,0,0,.15);
+
+            background:white;
+
+        }
+
+        h1{
+
+            color:#28a745;
+
+        }
+
+        a{
+
+            display:inline-block;
+
+            margin-top:25px;
+
+            padding:12px 24px;
+
+            background:#6f4e37;
+
+            color:white;
+
+            text-decoration:none;
+
+            border-radius:5px;
+
+        }
+
+        a:hover{
+
+            opacity:.9;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<div class="card">
+
+    <h1>✔ Email Verified!</h1>
+
+    <p>
+
+        Your email has been successfully verified.
+
+    </p>
+
+    <p>
+
+        You may now log in to your account.
+
+    </p>
+
+    <a href="/html/login.html">
+
+        Login
+
+    </a>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+$("#header").load("/html/header.html",function(){
+
+    $.getScript("/js/header.js");
+
+});
+
+</script>
+
+</body>
+
+</html>

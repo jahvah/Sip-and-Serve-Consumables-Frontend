@@ -11,9 +11,12 @@ $("#registerBtn").click(function () {
 
         success: function (res) {
 
-            localStorage.setItem("userId", res.user_id);
+            $("#msg")
+                .css("color", "green")
+                .text(res.message);
 
-            window.location.href = "completeInformation.html";
+            $("#registerBtn").prop("disabled", true);
+
         },
 
         error: function (err) {

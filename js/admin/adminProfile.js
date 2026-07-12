@@ -192,23 +192,40 @@ function updateProfile(){
 
         success: function (res) {
 
-            // Update the email stored in localStorage
-            const user = JSON.parse(localStorage.getItem("user"));
+        alert(res.message);
 
-            user.email = $("#emailInput").val().trim();
+        $("#editModal").hide();
 
-            localStorage.setItem(
-                "user",
-                JSON.stringify(user)
+        // Email was changed
+        if (res.emailChanged) {
+
+            localStorage.removeItem("token");
+
+            localStorage.removeItem("user");
+
+            alert(
+                "A verification email has been sent to your new email address. Please verify it before logging in again."
             );
 
-            alert(res.message);
+            window.location.href = "/html/login.html";
 
-            $("#editModal").hide();
+            return;
 
-            loadProfile();
+        }
 
-        },
+        // Email did not change
+        const user = JSON.parse(localStorage.getItem("user"));
+
+        user.email = $("#emailInput").val().trim();
+
+        localStorage.setItem(
+            "user",
+            JSON.stringify(user)
+        );
+
+        loadProfile();
+
+    },
 
         error:function(xhr){
 
